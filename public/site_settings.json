@@ -1296,12 +1296,12 @@
     }
   ],
   "themeConfig": {
-    "preset": "emerald-gold",
-    "primaryColor": "#064E3B",
-    "accentColor": "#D97706",
-    "backgroundColor": "#F8FAF9",
-    "textColor": "#0F172A",
-    "headerBg": "#022C22"
+    "preset": "dark-bordeaux",
+    "primaryColor": "#18181B",
+    "accentColor": "#991B1B",
+    "backgroundColor": "#FAFAFA",
+    "textColor": "#18181B",
+    "headerBg": "#0F0F10"
   },
   "craftsmanshipSteps": [
     {
@@ -1375,7 +1375,7 @@
       "iconName": "Truck"
     }
   ],
-  "_updatedAt": 1792996731592,
+  "_updatedAt": 1795244018053,
   "faqItems": [
     {
       "q": "Soru 1",
@@ -1534,14 +1534,14 @@
     "sendCustomerConfirmation": true,
     "sendAdminNotification": true
   },
-  "newsletterSubject": "İrem Comfort | 2026–2027 Yeni Sezon Koleksiyonu Yayında",
-  "newsletterBadge": "YENİ SEZON",
-  "newsletterTitle": "Mağazanızın yeni comfort koleksiyonu hazır.",
-  "newsletterSubtitle": "Hakiki deri • Konfor odaklı üretim • Manisa",
-  "newsletterBody": "Değerli Müşterimiz ve İş Ortağımız,\n\nİrem Comfort 2026–2027 yeni sezon koleksiyonumuzu sizlerle buluşturuyoruz. Hakiki deri terlik, sandalet ve comfort modellerimizi mağazanız için tek bir dijital katalogda inceleyebilirsiniz.\n\nYeni modelleri, koleksiyon detaylarını ve üretim yaklaşımımızı keşfetmek için sizi kataloğumuza bekliyoruz.",
-  "newsletterCtaText": "Yeni Sezon Kataloğunu Aç",
-  "newsletterCtaUrl": "https://www.iremcomfort.com/katalog",
-  "newsletterBanner": "https://images.unsplash.com/photo-1603808033176-9d134e6f2c74?auto=format&fit=crop&q=85&w=1400",
+  "newsletterSubject": "İrem Comfort | Mağazanız için Yeni Modeller",
+  "newsletterBadge": "KOLEKSİYON SEÇKİSİ",
+  "newsletterTitle": "Mağazanızın vitrinine yeni modeller.",
+  "newsletterSubtitle": "Seçili comfort modellerini şimdi inceleyin.",
+  "newsletterBody": "Değerli İş Ortağımız,\n\nBu bültende mağazanız için öne çıkan modellerimizi bir araya getirdik. Ürünleri inceleyerek koleksiyonunuz için uygun modelleri seçebilir, sipariş detayları için bizimle iletişime geçebilirsiniz.",
+  "newsletterCtaText": "Modelleri İncele",
+  "newsletterCtaUrl": "https://www.iremcomfort.com/urunler",
+  "newsletterBanner": "",
   "newsletterOfferBox": "",
   "catalogs": [
     {
