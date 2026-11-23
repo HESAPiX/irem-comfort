@@ -1,29 +1,35 @@
-import React, { useState } from 'react';
-import { ArrowLeft, Check, Copy, MessageCircle, Share2 } from 'lucide-react';
-import { useAppImages } from '../context/ImageContext';
-import { COLLECTION_ITEMS } from '../constants/data';
-import { SitePageShell } from './SitePageShell';
-import { addToWholesaleCart } from '../utils/wholesaleCart';
-import { PremiumProductShowcase } from '../components/ui/PremiumProductShowcase';
+import React,{useMemo,useState} from 'react';
+import {ArrowLeft,Check,Share2,MessageCircle,ChevronLeft,ChevronRight,Clock3,Store,Info} from 'lucide-react';
+import {useAppImages} from '../context/ImageContext';
+import {COLLECTION_ITEMS} from '../constants/data';
+import {SitePageShell} from './SitePageShell';
+import {addToWholesaleCart} from '../utils/wholesaleCart';
 
-export const ProductDetailPage: React.FC<{productId:string;onAdminClick?:()=>void;openLegal?:(d:any)=>void}> = ({productId,onAdminClick,openLegal}) => {
- const {collectionItems, images}=useAppImages();
- const item=(collectionItems?.length?collectionItems:COLLECTION_ITEMS).find(x=>x.id===productId);
- const [copied,setCopied]=useState(false);
- if(!item) return <SitePageShell title="Ürün bulunamadı" activePath="/urunler" onAdminClick={onAdminClick} legal={{open:openLegal!}}><div className="max-w-7xl mx-auto px-5 py-20"><a href="/urunler" className="font-bold text-[#102f59]">Ürünlere dön</a></div></SitePageShell>;
- const share=async()=>{const url=`${window.location.origin}/urunler/${encodeURIComponent(item.id)}`;try{if(navigator.share){await navigator.share({title:item.name,text:item.tagline,url});}else{await navigator.clipboard.writeText(url);setCopied(true);setTimeout(()=>setCopied(false),1800)}}catch{}}
+export const ProductDetailPage:React.FC<{productId:string;onAdminClick?:()=>void;openLegal?:(d:any)=>void}>=({productId,onAdminClick,openLegal})=>{
+ const {collectionItems,images}=useAppImages();const item=(collectionItems?.length?collectionItems:COLLECTION_ITEMS).find(x=>x.id===productId);
+ const [color,setColor]=useState(0),[photo,setPhoto]=useState(0),[size,setSize]=useState(''),[copied,setCopied]=useState(false);
+ const activeColor=item?.colors?.[color];const gallery=useMemo(()=>{if(!item)return[];const c=item.colors?.[color];const list=c?.images?.length?c.images:[c?.image].filter(Boolean) as string[];const base=images.collectionImages[item.id]?.image||item.image;return [...new Set([...list,...(base?[base]:[]),...(images.collectionImages[item.id]?.secondaryImage?[images.collectionImages[item.id].secondaryImage]:[])])]},[item,color,images]);
+ if(!item)return <SitePageShell title="Ürün bulunamadı" activePath="/urunler" onAdminClick={onAdminClick} legal={{open:openLegal!}}><div className="p-16"><a href="/urunler">Ürünlere dön</a></div></SitePageShell>;
+ const sizes=item.sizes?.length?item.sizes:['36','37','38','39','40','41'];
+ const share=async()=>{const url=location.href;try{if(navigator.share)await navigator.share({title:item.name,url});else{await navigator.clipboard.writeText(url);setCopied(true)}}catch{}};
  return <SitePageShell title={item.name} eyebrow={item.category} intro={item.subtitle} activePath="/urunler" onAdminClick={onAdminClick} legal={{open:openLegal!}}>
-  <section className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 py-12 sm:py-20">
-   <a href="/urunler" className="inline-flex items-center gap-2 text-sm font-bold text-[#102f59] mb-7"><ArrowLeft className="w-4 h-4"/> Ürünlere dön</a>
-   <div className="grid lg:grid-cols-[1.05fr_.95fr] gap-8">
-    <div className="min-w-0"><PremiumProductShowcase item={item} baseImage={images.collectionImages[item.id]?.image} secondaryImage={images.collectionImages[item.id]?.secondaryImage} compact /></div>
-    <div className="bg-white rounded-[2rem] border border-slate-200 p-7 sm:p-10">
-     <div className="text-[11px] uppercase tracking-[.2em] text-[#8b6a2b] font-bold">TOPTAN ÜRÜN BİLGİSİ</div><h2 className="mt-3 text-3xl font-serif-luxury font-bold text-[#102f59]">{item.tagline}</h2><p className="mt-5 text-sm text-slate-600 leading-relaxed">{item.description}</p>
-     <div className="mt-7 grid sm:grid-cols-2 gap-3">{item.features.slice(0,4).map(f=><div key={f} className="flex gap-2 text-sm text-slate-700"><Check className="w-4 h-4 text-[#8b6a2b] mt-0.5"/>{f}</div>)}</div>
-     <div className="mt-8 p-5 rounded-2xl bg-[#f7f5f1] border border-slate-200"><div className="text-xs font-bold text-slate-500">NUMARA / TABAN</div><div className="mt-1 font-bold text-[#102f59]">{item.dimensions}</div></div>
-     <div className="mt-7 flex flex-wrap gap-3"><button onClick={()=>addToWholesaleCart(item,item.colors?.[0]?.name)} className="inline-flex items-center gap-2 rounded-full bg-[#d6b46a] text-[#102f59] px-5 py-3 font-bold text-sm">Sepete ekle</button><a href="/toptan-sepet" className="inline-flex items-center gap-2 rounded-full bg-[#102f59] text-white px-5 py-3 font-bold text-sm">Toptan teklif iste <MessageCircle className="w-4 h-4"/></a><button onClick={share} className="inline-flex items-center gap-2 rounded-full border border-[#102f59]/20 px-5 py-3 font-bold text-sm text-[#102f59]">{copied?<Copy className="w-4 h-4"/>:<Share2 className="w-4 h-4"/>}{copied?'Link kopyalandı':'Ürün linkini paylaş'}</button></div>
-    </div>
-   </div>
-  </section>
- </SitePageShell>;
+ <section className="max-w-[1440px] mx-auto px-4 sm:px-7 py-7">
+ <a href="/urunler" className="inline-flex items-center gap-2 text-sm font-semibold text-[#102f59] mb-5"><ArrowLeft className="w-4 h-4"/> Ürünlere dön</a>
+ <div className="grid lg:grid-cols-[minmax(0,1.05fr)_minmax(360px,1fr)_250px] gap-5 items-start">
+ <div className="min-w-0"><div className="relative bg-white border border-slate-200 rounded-xl overflow-hidden aspect-[4/5] flex items-center justify-center"><img src={gallery[photo]||item.image||''} alt={item.name} className="w-full h-full object-contain"/>{gallery.length>1&&<><button onClick={()=>setPhoto((photo+gallery.length-1)%gallery.length)} className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-white shadow p-3"><ChevronLeft/></button><button onClick={()=>setPhoto((photo+1)%gallery.length)} className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-white shadow p-3"><ChevronRight/></button></>}</div><div className="flex gap-2 mt-3 overflow-x-auto pb-1">{gallery.map((url,i)=><button key={url+i} onClick={()=>setPhoto(i)} className={`w-16 h-16 shrink-0 rounded-lg overflow-hidden border-2 ${photo===i?'border-[#b8862f]':'border-slate-200'}`}><img src={url} className="w-full h-full object-cover"/></button>)}</div></div>
+ <div className="bg-white border border-slate-200 rounded-xl p-5 sm:p-6 space-y-5">
+ <div><div className="text-[10px] font-bold tracking-widest text-[#9b762e] uppercase">{item.category}</div><h1 className="text-2xl sm:text-3xl font-semibold text-slate-900 mt-2">{item.name}</h1><p className="text-sm text-slate-500 mt-2">{item.subtitle}</p></div>
+ <p className="text-sm leading-7 text-slate-700">{item.description}</p>
+ <div><div className="text-sm font-semibold mb-3">Renk: <span className="font-normal">{activeColor?.name||'Belirtilmedi'}</span></div><div className="flex flex-wrap gap-2">{item.colors?.map((c,i)=><button key={c.name} onClick={()=>{setColor(i);setPhoto(0)}} className={`rounded-lg border p-1.5 flex items-center gap-2 ${color===i?'border-[#b8862f] ring-1 ring-[#b8862f]':'border-slate-200'}`}><span className="w-6 h-6 rounded-md border" style={{background:c.hex}}/><span className="text-xs">{c.name}</span></button>)}</div></div>
+ <div><div className="text-sm font-semibold mb-3">Beden: <span className="font-normal">{size||'Seçilmedi'}</span></div><div className="flex flex-wrap gap-2">{sizes.map(s=><button key={s} onClick={()=>setSize(s)} className={`min-w-11 px-3 py-2 rounded-md border text-sm ${size===s?'border-[#b8862f] bg-amber-50 text-[#8b6423]':'border-slate-200'}`}>{s}</button>)}</div></div>
+ <div className="grid sm:grid-cols-2 gap-2 text-xs text-slate-600 border-t pt-4">{item.materials?.map(x=><div key={x} className="flex gap-2"><Check className="w-4 h-4 text-[#9b762e] shrink-0"/>{x}</div>)}</div>
+ <div className="flex flex-wrap gap-2"><button onClick={()=>addToWholesaleCart(item,activeColor?.name)} className="flex-1 min-w-40 rounded-lg bg-[#b94f0b] text-white py-3 font-bold text-sm">Toptan teklif sepetine ekle</button><button onClick={share} className="rounded-lg border border-slate-200 px-4 py-3 text-sm"><Share2 className="w-4 h-4 inline mr-1"/>{copied?'Kopyalandı':'Paylaş'}</button></div>
+ <a href="/toptan-satis" className="block text-center text-sm text-[#102f59] font-semibold"><MessageCircle className="inline w-4 h-4 mr-1"/> Toptan satış hakkında bilgi alın</a>
+ </div>
+ <aside className="space-y-3"><div className="rounded-xl border border-slate-200 bg-white p-4"><div className="flex items-center gap-2 text-sm font-bold"><Store className="w-4 h-4 text-[#9b762e]"/> İrem Comfort</div><p className="text-xs text-slate-500 mt-2">Hakiki deri kadın comfort terlik ve sandalet üretimi</p><p className="text-xs text-slate-700 mt-3">Toptan üretim ve sipariş</p><a href="/iletisim" className="mt-3 block text-center rounded-lg bg-slate-900 text-white py-2 text-xs font-bold">Satıcıyla iletişime geç</a></div>
+ <div className="rounded-xl border border-slate-200 bg-white p-4"><div className="flex items-center gap-2 font-bold text-sm"><Clock3 className="w-4 h-4 text-[#9b762e]"/> Üretim / Termin</div><p className="text-xl font-bold text-slate-900 mt-2">15–75 gün</p><p className="text-xs text-slate-500 mt-1">Toptan siparişlerde model ve sipariş kapsamına göre termin süresi</p></div>
+ <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-xs text-slate-600"><Info className="inline w-4 h-4 mr-1"/> Stok ve anlık kargo vaadi gösterilmez. Sipariş ve üretim ayrıntıları için iletişime geçebilirsiniz.</div>
+ </aside></div>
+ <section className="mt-7 grid md:grid-cols-2 gap-5"><div className="bg-white border rounded-xl p-5"><h2 className="font-bold text-slate-900">Ürün özellikleri</h2><ul className="mt-3 space-y-2 text-sm text-slate-600">{item.features?.map(f=><li key={f}>• {f}</li>)}</ul><p className="text-xs text-slate-500 mt-3">{item.dimensions}</p></div><div className="bg-white border rounded-xl p-5"><h2 className="font-bold text-slate-900">Soru & cevap</h2><p className="text-sm text-slate-500 mt-3">Bu ürünle ilgili henüz yayınlanmış bir soru veya cevap bulunmuyor.</p><a href="/iletisim" className="inline-block mt-4 text-sm font-semibold text-[#102f59]">Ürün hakkında soru iletin</a></div></section>
+ </section></SitePageShell>;
 };
