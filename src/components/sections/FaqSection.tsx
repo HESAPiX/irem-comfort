@@ -33,6 +33,8 @@ export const FaqSection: React.FC = () => {
         return language === 'tr' ? 'Hakiki Deri Bakımı' : language === 'en' ? 'Genuine Leather Care' : 'العناية بالجلد الطبيعي';
       case 'kalip':
         return language === 'tr' ? 'Numara & Kalıp' : language === 'en' ? 'Size & Fit' : 'المقاس والقالب';
+      case 'genel':
+        return language === 'tr' ? 'Genel Bilgi' : language === 'en' ? 'General Information' : 'معلومات عامة';
       default:
         return language === 'tr' ? 'Genel Bilgi' : language === 'en' ? 'General Info' : 'معلومات عامة';
     }
@@ -54,6 +56,7 @@ export const FaqSection: React.FC = () => {
     { id: 'kargo', label: language === 'tr' ? 'Kargo & Teslimat' : language === 'en' ? 'Shipping & Delivery' : 'الشحن والتوصيل', icon: Truck },
     { id: 'bakim', label: language === 'tr' ? 'Hakiki Deri Bakımı' : language === 'en' ? 'Genuine Leather Care' : 'العناية بالجلد الطبيعي', icon: Sparkles },
     { id: 'kalip', label: language === 'tr' ? 'Numara & Kalıp' : language === 'en' ? 'Size & Fit' : 'المقاس والقالب', icon: Footprints },
+    { id: 'genel', label: language === 'tr' ? 'Genel Bilgi' : language === 'en' ? 'General Info' : 'معلومات عامة', icon: HelpCircle },
   ];
 
   const translateFaq = (item?: FaqItem | null) => {
@@ -69,12 +72,12 @@ export const FaqSection: React.FC = () => {
           : 'يمكنك التواصل معنا عبر رقم الواتساب أو نموذج الاتصال لطلب كتالوج الجملة وقائمة الأسعار. نوفر خصومات مميزة للمحلات وطلبات الكميات.'
       };
     }
-    if (qLower.includes('kargo') || qLower.includes('teslimat')) {
+    if (qLower.includes('kargo') || qLower.includes('teslimat') || qLower.includes('termin') || qLower.includes('üretim')) {
       return {
-        question: language === 'en' ? 'What are your delivery times and shipping conditions?' : 'ما هي مدة التوصيل وشروط الشحن؟',
+        question: language === 'en' ? 'What is the production lead time for wholesale orders?' : 'ما هي مدة تجهيز وإنتاج طلبات الجملة؟',
         answer: language === 'en'
-          ? 'Wholesale orders are dispatched within 3-7 business days depending on production volume. Siparişler üretim ve sevkiyat planına göre hazırlanır.'
-          : 'يتم شحن طلبات الجملة خلال 3-7 أيام عمل بحسب حجم الإنتاج. وتُشحن طلبات التجزئة عبر ترينديول خلال يوم العمل نفسه أو التالي.'
+          ? 'The production lead time is 15–75 days depending on the models and scope of the order. The estimated schedule is confirmed after the order details are agreed.'
+          : 'تتراوح مدة تجهيز وإنتاج طلبات الجملة بين 15 و75 يوماً حسب الموديلات ونطاق الطلب. ويتم تأكيد الموعد التقديري بعد الاتفاق على تفاصيل الطلب.'
       };
     }
     if (qLower.includes('deri bakımı') || qLower.includes('bakım') || qLower.includes('temizlen')) {
