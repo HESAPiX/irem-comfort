@@ -14,7 +14,7 @@ const retailPartners=[
  {name:'TANCA',style:'font-black tracking-[.12em] text-[25px] text-[#1b3150]'}
 ];
 export const CustomersPage:React.FC<{onAdminClick?:()=>void;openLegal?:(d:any)=>void}>=({onAdminClick,openLegal})=>(
- <SitePageShell title="Müşterilerimiz" eyebrow="GÜVENLE BÜYÜYEN İŞ ORTAKLIKLARI" intro="Manisa'daki üretim deneyimimizi Türkiye'deki mağaza iş ortaklarımız ve uluslararası pazarlara taşıyoruz." activePath="/musterilerimiz" onAdminClick={onAdminClick} legal={{open:openLegal!}}>
+ <SitePageShell title="Müşterilerimiz" eyebrow="GÜVENLE BÜYÜYEN İŞ ORTAKLIKLARI" intro="Manisa'daki üretim deneyimimizi Türkiye'deki mağaza iş ortaklarımız ve uluslararası pazarlara taşıyoruz." activePath="/musterilerimiz" onAdminClick={onAdminClick} legal={{open:openLegal!}} showHero={false}>
   <main className="bg-[#fff] text-[#10294b]">
    <section className="border-b border-[#ece8df] bg-white">
     <div className="max-w-[1320px] mx-auto px-5 sm:px-10 py-9 sm:py-12">
