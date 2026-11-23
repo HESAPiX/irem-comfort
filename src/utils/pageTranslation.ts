@@ -61,6 +61,15 @@ export function installPageTranslation(target: "tr"|"en"|"ar") {
       if(currentTarget!==target)return;
       const fresh:Text[]=[];
       records.forEach(record=>{
+        if(record.type==="characterData" && record.target.nodeType===Node.TEXT_NODE) {
+          const changed=record.target as Text;
+          const previous=translated.get(changed);
+          if(previous && changed.nodeValue!==previous) {
+            originals.set(changed,changed.nodeValue||"");
+            translated.delete(changed);
+            fresh.push(changed);
+          }
+        }
         record.addedNodes.forEach(n=>{
           if(n.nodeType===Node.TEXT_NODE){
             const t=n as Text;
@@ -71,6 +80,6 @@ export function installPageTranslation(target: "tr"|"en"|"ar") {
       void run(fresh);
     });
   });
-  observer.observe(document.body,{childList:true,subtree:true});
+  observer.observe(document.body,{childList:true,characterData:true,subtree:true});
   return ()=>{if(observer){observer.disconnect();observer=null;}};
 }
