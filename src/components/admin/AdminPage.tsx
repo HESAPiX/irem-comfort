@@ -35,7 +35,7 @@ import {
   QrCode, ToggleLeft, ToggleRight, Send, MessageSquare, Crop, Info,
   Mail, Server, AtSign, Save, MailCheck, CheckCircle2, Shield,
   Users, Download, Copy, Trash2, Plus, Search, Phone, HelpCircle,
-  GitBranch, Globe, FileImage, Video, RefreshCw, PowerOff, Palette, BarChart3, Activity,
+  GitBranch, Globe, FileImage, FileSpreadsheet, Video, RefreshCw, PowerOff, Palette, BarChart3, Activity,
   Layout, Database, GraduationCap, ShoppingBag, ChevronLeft, ChevronRight, Menu, X, Smartphone, BellRing, BellOff, Volume2, Star
 } from 'lucide-react';
 import { pwaNotificationService } from '../../services/pwaNotificationService';
