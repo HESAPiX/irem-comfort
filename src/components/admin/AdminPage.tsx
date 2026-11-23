@@ -238,7 +238,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
     }
   };
 
-  const [githubRepoInput, setGithubRepoInput] = useState<string>(() => systemConfig.githubRepo || localStorage.getItem('irem_github_repo') || 'kadirkarga25-rgb/irem-comfort');
+  const [githubRepoInput, setGithubRepoInput] = useState<string>(() => systemConfig.githubRepo || localStorage.getItem('irem_github_repo') || 'HESAPiX/irem-comfort');
   const [githubBranchInput, setGithubBranchInput] = useState<string>(() => systemConfig.githubBranch || localStorage.getItem('irem_github_branch') || 'main');
   const [githubTokenInput, setGithubTokenInput] = useState<string>('');
   const [isTestingGithub, setIsTestingGithub] = useState(false);
@@ -299,7 +299,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
         headers: { 'Content-Type': 'application/json' },
         signal: controller.signal,
         body: JSON.stringify({
-          repo: githubRepoInput || localStorage.getItem('irem_github_repo') || 'kadirkarga25-rgb/irem-comfort',
+          repo: githubRepoInput || localStorage.getItem('irem_github_repo') || 'HESAPiX/irem-comfort',
           branch: githubBranchInput || localStorage.getItem('irem_github_branch') || 'main',
           settings: freshStatePayload,
           commitMessage: 'Admin: Site değişiklikleri yayınlandı'
@@ -4364,7 +4364,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
                       type="text"
                       value={githubRepoInput}
                       onChange={(e) => setGithubRepoInput(e.target.value)}
-                      placeholder="kadirkarga25-rgb/irem-comfort"
+                      placeholder="HESAPiX/irem-comfort"
                       className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-300 focus:border-[#082C6C] focus:outline-none bg-slate-50 font-mono font-bold"
                     />
                   </div>
@@ -4385,7 +4385,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
                   <div className="space-y-1.5 md:col-span-2">
                     <label className="text-xs font-bold text-slate-700 block">GitHub App Bağlantısı</label>
                     <div className="w-full px-3.5 py-3 text-xs rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-800 font-bold">
-                      🟢 GitHub App aktif — Repository: kadirkarga25-rgb/irem-comfort — Branch: main
+                      🟢 GitHub App aktif — Repository: HESAPiX/irem-comfort — Branch: main
                     </div>
                     <p className="text-[11px] text-slate-500">
                       GitHub kimlik doğrulaması sunucu tarafında GitHub App ile yapılır. Personal Access Token tarayıcıda saklanmaz.
