@@ -16,6 +16,7 @@ import { ProductsPage } from './components/pages/ProductsPage';
 import { SitePageShell } from './pages/SitePageShell';
 import { HomePage } from './pages/HomePage';
 import { CollectionLandingPage } from './pages/CollectionLandingPage';
+import { CustomersPage } from './pages/CustomersPage';
 import { ProductDetailPage } from './pages/ProductDetailPage';
 import { WholesalePage } from './pages/WholesalePage';
 import { BrandPage } from './pages/BrandPage';
@@ -69,6 +70,7 @@ function MainAppContent() {
   else if (path === '/urunler') content = <SitePageShell title="Kadın comfort ürün koleksiyonu" eyebrow="ÜRÜNLER" intro="Mağazanız için model, renk ve konfor seçeneklerini inceleyin." activePath="/urunler" {...shared}><ProductsPage onBackToHome={()=>navigate('/')} onInquireProduct={()=>navigate('/toptan-satis')}/></SitePageShell>;
   else if (path.startsWith('/urunler/')) content = <ProductDetailPage productId={decodeURIComponent(path.split('/').slice(2).join('/'))} {...shared}/>;
   else if (path === '/markamiz') content = <BrandPage {...shared}/>;
+  else if (path === '/musterilerimiz') content = <CustomersPage {...shared}/>;
   else if (path === '/toptan-satis') content = <WholesalePage {...shared}/>;
   else if (path === '/toptan-basvuru') content = <WholesaleApplicationPage {...shared}/>;
   else if (path === '/toptan-sepet') content = <WholesaleQuoteCartPage {...shared}/>;
