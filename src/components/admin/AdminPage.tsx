@@ -39,6 +39,7 @@ import {
   Layout, Database, GraduationCap, ShoppingBag, ChevronLeft, ChevronRight, Menu, X, Smartphone, BellRing, BellOff, Volume2, Star
 } from 'lucide-react';
 import { pwaNotificationService } from '../../services/pwaNotificationService';
+import { TrendyolCatalogImportAdminTab } from './TrendyolCatalogImportAdminTab';
 
 
 const TARGET_SPECS_MAP: Record<string, CropTargetSpecs> = {
@@ -192,7 +193,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
   // that old heartbeat could incorrectly log an active admin out.
 
   // Admin Panel Tabs
-  const [activeTab, setActiveTab] = useState<'overview' | 'appointments' | 'fair' | 'general' | 'collection' | 'craftsmanship' | 'faq' | 'contact' | 'page_builder' | 'presets' | 'leads' | 'crm' | 'testimonials' | 'newsletter' | 'email' | 'system' | 'media' | 'deployment_exp' | 'seo' | 'appearance' | 'analytics' | 'security' | 'ai_arch' | 'live_monitor' | 'backup' | 'ai_training' | 'infrastructure' | 'conv_logs' | 'site_home' | 'site_brand' | 'site_workshop' | 'site_wholesale' | 'site_contact'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'appointments' | 'fair' | 'general' | 'collection' | 'craftsmanship' | 'faq' | 'contact' | 'page_builder' | 'presets' | 'leads' | 'crm' | 'testimonials' | 'newsletter' | 'email' | 'system' | 'media' | 'deployment_exp' | 'seo' | 'appearance' | 'analytics' | 'security' | 'ai_arch' | 'live_monitor' | 'backup' | 'ai_training' | 'infrastructure' | 'conv_logs' | 'site_home' | 'site_brand' | 'site_workshop' | 'site_wholesale' | 'site_contact' | 'trendyol_import'>('overview');
 
   // Sidebar Layout States
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(false);
@@ -213,6 +214,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
       case 'appearance': return 'Görünüm, Tema & Sıralama';
       case 'general': return 'Ana Sayfa & Hakkımızda';
       case 'collection': return 'Koleksiyon Ürünleri';
+      case 'trendyol_import': return 'Trendyol Katalog Aktarımı';
       case 'craftsmanship': return 'Atölye & Zanaat';
       case 'presets': return 'Hazır Görseller';
       case 'media': return 'Medya Kütüphanesi';
@@ -1316,6 +1318,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
       items: [
         { id: 'general', label: 'Ana Sayfa & Hakkımızda', icon: Sliders },
         { id: 'collection', label: `Ürün & Koleksiyon Yönetimi (${collectionItems.length})`, icon: Layers },
+        { id: 'trendyol_import', label: 'Trendyol Katalog Aktarımı', icon: FileSpreadsheet, badgeColor: 'text-emerald-400' },
         { id: 'craftsmanship', label: 'Atölye & Zanaat', icon: Sparkles },
         { id: 'presets', label: 'Hazır Görseller', icon: Eye },
         { id: 'media', label: 'Medya Kütüphanesi', icon: FileImage, badgeColor: 'text-amber-400' },
@@ -2926,6 +2929,17 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
               })}
             </div>
           </div>
+        )}
+
+        {activeTab === 'trendyol_import' && (
+          <TrendyolCatalogImportAdminTab
+            existingItems={collectionItems}
+            onImport={(products) => {
+              products.forEach((product) => addCollectionItem(product));
+              markDirty();
+              showToast(`${products.length} model koleksiyon taslağına eklendi. Kaydetmeyi unutmayın.`);
+            }}
+          />
         )}
 
         {/* Tab 3: Craftsmanship Steps */}
