@@ -21,6 +21,11 @@ export interface CollectionItem {
   colors: ColorOption[];
   features: string[];
   isFeatured?: boolean;
+  modelCode?: string;
+  sizes?: string[];
+  barcodes?: string[];
+  leadTime?: string;
+  trendyolUrl?: string;
 }
 
 export interface CraftsmanshipStep {
