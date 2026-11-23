@@ -2769,6 +2769,14 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
                                     </button>
                                   </div>
                                 </div>
+                                <label className="block pt-2">
+                                  <span className="text-[10px] font-bold text-slate-500">Bu renge ait ek galeri fotoğrafları (her satıra bir URL)</span>
+                                  <textarea rows={3} value={(col.images || []).join('\n')} onChange={(e) => {
+                                    const nextColors = [...item.colors];
+                                    nextColors[colorIdx] = { ...nextColors[colorIdx], images: e.target.value.split('\n').map(url => url.trim()).filter(Boolean) };
+                                    updateCollectionItem(item.id, { colors: nextColors });
+                                  }} placeholder="https://.../renk-on.jpg&#10;https://.../renk-yan.jpg" className="mt-1 w-full px-2 py-1.5 text-[11px] rounded border border-slate-200 focus:border-[#082C6C] focus:outline-none text-slate-700 bg-white" />
+                                </label>
                               </div>
                             ))}
                           </div>
