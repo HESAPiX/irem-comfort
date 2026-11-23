@@ -2,6 +2,8 @@ export interface ColorOption {
   name: string;
   hex: string;
   image?: string;
+  /** Additional photos for this exact colour variant. */
+  images?: string[];
 }
 
 export interface CollectionItem {
