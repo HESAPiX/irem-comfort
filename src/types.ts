@@ -11,6 +11,10 @@ export interface CollectionItem {
   name: string;
   subtitle: string;
   category: string;
+  /** Main curated collection, e.g. Saraçlı Koleksiyon. */
+  collectionGroup?: string;
+  /** Sub-collection inside the main collection. */
+  subCollection?: string;
   tagline: string;
   description: string;
   image: string;
