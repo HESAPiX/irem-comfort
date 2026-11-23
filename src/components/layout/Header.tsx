@@ -10,11 +10,12 @@ import {Language} from '../../types';
 
 interface HeaderProps{scrollY:number;activeSection:string;onNavigate:(path:string)=>void;onOpenFairModal?:()=>void;}
 const links=[['/','Ana Sayfa'],['/koleksiyonlar','Koleksiyonlar'],['/urunler','Ürünler'],['/markamiz','Markamız'],['/musterilerimiz','Müşterilerimiz'],['/toptan-satis','Toptan Satış'],['/atolye','Atölye'],['/katalog','Katalog'],['/randevu','Randevu'],['/toptan-basvuru','B2B Başvuru'],['/toptan-sepet','Teklif Sepeti'],['/iletisim','İletişim']] as const;
-const languageOptions:{code:Language;flag:string;label:string;native:string}[]=[
- {code:'tr',flag:'🇹🇷',label:'Türkçe',native:'Türkçe'},
- {code:'en',flag:'🇬🇧',label:'English',native:'English'},
- {code:'ar',flag:'🇸🇦',label:'العربية',native:'العربية'}
+const languageOptions:{code:Language;flagUrl:string;label:string;native:string}[]=[
+ {code:'tr',flagUrl:'https://flagcdn.com/w80/tr.png',label:'Türkçe',native:'Türkçe'},
+ {code:'en',flagUrl:'https://flagcdn.com/w80/gb.png',label:'English',native:'English'},
+ {code:'ar',flagUrl:'https://flagcdn.com/w80/sa.png',label:'Arabic',native:'العربية'}
 ];
+const FlagImage:React.FC<{src:string;alt:string;className?:string}> = ({src,alt,className=''}) => <img src={src} alt={alt} loading="eager" decoding="async" referrerPolicy="no-referrer" className={`object-cover ${className}`} />;
 export const Header:React.FC<HeaderProps>=({activeSection,onNavigate,onOpenFairModal})=>{
  const{language,setLanguage}=useAppImages();const[open,setOpen]=useState(false);const[languageOpen,setLanguageOpen]=useState(false);
  const selected=languageOptions.find(x=>x.code===language)||languageOptions[0];
@@ -22,13 +23,13 @@ export const Header:React.FC<HeaderProps>=({activeSection,onNavigate,onOpenFairM
  const chooseLanguage=(code:Language)=>{setLanguage(code);setLanguageOpen(false);};
  const languageMenu=<div className="relative" data-no-auto-translate="true" translate="no">
   <button onClick={()=>setLanguageOpen(v=>!v)} data-no-auto-translate="true" translate="no" aria-haspopup="menu" aria-expanded={languageOpen} className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 shadow-[0_2px_8px_rgba(16,41,75,.05)] hover:border-[#b8862f] hover:shadow-sm transition">
-   <span className="grid h-7 w-9 place-items-center overflow-hidden rounded-md bg-[#f5f3ee] text-[25px] leading-none">{selected.flag}</span>
+   <span className="grid h-7 w-9 place-items-center overflow-hidden rounded-md bg-[#f5f3ee]"><FlagImage src={selected.flagUrl} alt={selected.label} className="h-full w-full"/></span>
    <span className="text-[11px] font-extrabold uppercase tracking-wide text-[#102f59]">{selected.code}</span><ChevronDown size={13} className="text-[#102f59]"/>
   </button>
   <AnimatePresence>{languageOpen&&<motion.div initial={{opacity:0,y:-7,scale:.98}} animate={{opacity:1,y:0,scale:1}} exit={{opacity:0,y:-7,scale:.98}} transition={{duration:.16}} className="absolute right-0 top-full mt-2 w-56 overflow-hidden rounded-2xl border border-slate-200 bg-white p-1.5 shadow-[0_16px_40px_rgba(16,41,75,.18)] z-[80]" role="menu" data-no-auto-translate="true" translate="no">
    {languageOptions.map(option=><button key={option.code} type="button" role="menuitem" onClick={()=>chooseLanguage(option.code)} data-no-auto-translate="true" translate="no" className={`relative isolate flex h-[58px] w-full items-center gap-3 overflow-hidden rounded-xl px-3 text-left text-xs font-semibold text-[#102f59] transition-all ${language===option.code?'bg-[#f5f3ee] ring-1 ring-[#b8862f]/25':'hover:bg-[#f5f3ee]/75'}`}>
-    <span aria-hidden="true" className="pointer-events-none absolute right-2 top-1/2 -z-10 -translate-y-1/2 select-none text-[43px] leading-none opacity-[.24]">{option.flag}</span>
-    <span className="grid h-9 w-12 shrink-0 place-items-center overflow-hidden rounded-lg border border-white/80 bg-white/75 text-[31px] leading-none shadow-sm">{option.flag}</span>
+    <FlagImage src={option.flagUrl} alt="" className="pointer-events-none absolute right-2 top-1/2 h-10 w-[60px] -translate-y-1/2 rounded-md opacity-[.20]"/>
+    <span className="grid h-9 w-12 shrink-0 place-items-center overflow-hidden rounded-lg border border-white/80 bg-white shadow-sm"><FlagImage src={option.flagUrl} alt={option.label} className="h-full w-full"/></span>
     <span className="flex-1 whitespace-nowrap font-bold">{option.native}</span>
     {language===option.code&&<Check size={15} className="text-[#a47c36]"/>}
    </button>)}
