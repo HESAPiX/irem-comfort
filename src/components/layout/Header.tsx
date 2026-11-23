@@ -26,7 +26,7 @@ export const Header:React.FC<HeaderProps>=({activeSection,onNavigate,onOpenFairM
  </div>;
  return <>
  <motion.header initial={{y:-70,opacity:0}} animate={{y:0,opacity:1}} className="fixed top-0 left-0 right-0 z-40">
-  <div className="bg-white/95 backdrop-blur-xl border-b border-[#102f59]/10 shadow-[0_5px_24px_rgba(16,47,89,.07)]">
+  <div className="relative z-[60] bg-white/95 backdrop-blur-xl border-b border-[#102f59]/10 shadow-[0_5px_24px_rgba(16,47,89,.07)]">
    <div className="max-w-[1440px] mx-auto px-4 sm:px-7 h-[70px] flex items-center justify-between gap-4">
     <button onClick={()=>go('/')} className="shrink-0" aria-label="İrem Comfort ana sayfa"><LogoFull iconSize={40} color="#102f59" showText/></button>
     <div className="flex items-center gap-2 sm:gap-3">
