@@ -20,10 +20,18 @@ export const Header:React.FC<HeaderProps>=({activeSection,onNavigate,onOpenFairM
  const selected=languageOptions.find(x=>x.code===language)||languageOptions[0];
  const go=(path:string)=>{setOpen(false);if(path!==window.location.pathname)window.history.pushState({},'',path);onNavigate(path);window.scrollTo({top:0,behavior:'smooth'});};
  const chooseLanguage=(code:Language)=>{setLanguage(code);setLanguageOpen(false);};
- const languageMenu=<div className="relative">
-  <button onClick={()=>setLanguageOpen(v=>!v)} data-no-auto-translate="true" translate="no" aria-haspopup="menu" aria-expanded={languageOpen} className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3.5 py-2.5 text-[11px] font-bold text-[#102f59] hover:border-[#b8862f] hover:shadow-sm transition"><span className="text-base leading-none">{selected.flag}</span><span>{selected.code.toUpperCase()}</span><ChevronDown size={13}/></button>
-  <AnimatePresence>{languageOpen&&<motion.div initial={{opacity:0,y:-5}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-5}} className="absolute right-0 top-full mt-2 w-44 rounded-2xl border border-slate-200 bg-white p-1.5 shadow-xl z-50" role="menu">{languageOptions.map(option=><button key={option.code} role="menuitem" onClick={()=>chooseLanguage(option.code)} className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-semibold text-[#102f59] hover:bg-[#f5f3ee]"><span className="text-lg">{option.flag}</span><span className="flex-1">{option.native}</span>{language===option.code&&<Check size={14} className="text-[#a47c36]"/>}</button>)}</motion.div>}</AnimatePresence>
- </div>;
+ const languageMenu=<div className="relative" data-no-auto-translate="true" translate="no">
+  <button onClick={()=>setLanguageOpen(v=>!v)} data-no-auto-translate="true" translate="no" aria-haspopup="menu" aria-expanded={languageOpen} className="inline-flex items-center gap-2.5 rounded-full border border-slate-200 bg-white px-3.5 py-2.5 text-[11px] font-bold text-[#102f59] shadow-[0_2px_8px_rgba(16,41,75,.04)] hover:border-[#b8862f] hover:shadow-sm transition">
+   <span className="text-[11px] font-extrabold tracking-wide">{selected.code==='tr'?'TR':selected.code==='en'?'GB':'SA'}</span><span className="uppercase">{selected.code.toUpperCase()}</span><ChevronDown size={13}/>
+  </button>
+  <AnimatePresence>{languageOpen&&<motion.div initial={{opacity:0,y:-7,scale:.98}} animate={{opacity:1,y:0,scale:1}} exit={{opacity:0,y:-7,scale:.98}} transition={{duration:.16}} className="absolute right-0 top-full mt-2 w-44 overflow-hidden rounded-2xl border border-slate-200 bg-white p-1.5 shadow-[0_16px_40px_rgba(16,41,75,.16)] z-[80]" role="menu" data-no-auto-translate="true" translate="no">
+   {languageOptions.map(option=><button key={option.code} type="button" role="menuitem" onClick={()=>chooseLanguage(option.code)} data-no-auto-translate="true" translate="no" className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-xs font-semibold text-[#102f59] transition-colors ${language===option.code?'bg-[#f5f3ee]':'hover:bg-[#f5f3ee]/75'}`}>
+    <span className="w-6 shrink-0 text-[11px] font-extrabold tracking-wide">{option.code==='tr'?'TR':option.code==='en'?'GB':'SA'}</span>
+    <span className="flex-1 whitespace-nowrap">{option.native}</span>
+    {language===option.code&&<Check size={14} className="text-[#a47c36]"/>}
+   </button>)}
+  </motion.div>}</AnimatePresence>
+ </div>
  return <>
  <motion.header initial={{y:-70,opacity:0}} animate={{y:0,opacity:1}} className="fixed top-0 left-0 right-0 z-40">
   <div className="relative z-[60] bg-white/95 backdrop-blur-xl border-b border-[#102f59]/10 shadow-[0_5px_24px_rgba(16,47,89,.07)]">
