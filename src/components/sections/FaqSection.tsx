@@ -104,7 +104,7 @@ export const FaqSection: React.FC = () => {
 
   // Filter active FAQs and apply search/category
   const filteredFaqs = useMemo(() => {
-    return faqItems
+    return visibleFaqItems
       .filter(item => item.isActive !== false)
       .filter(item => {
         if (selectedCategory !== 'hepsi' && item.category !== selectedCategory) {
