@@ -9,7 +9,7 @@ import {useAppImages} from '../../context/ImageContext';
 import {Language} from '../../types';
 
 interface HeaderProps{scrollY:number;activeSection:string;onNavigate:(path:string)=>void;onOpenFairModal?:()=>void;}
-const links=[['/','Ana Sayfa'],['/koleksiyonlar','Koleksiyonlar'],['/urunler','Ürünler'],['/markamiz','Markamız'],['/toptan-satis','Toptan Satış'],['/atolye','Atölye'],['/katalog','Katalog'],['/randevu','Randevu'],['/toptan-basvuru','B2B Başvuru'],['/toptan-sepet','Teklif Sepeti'],['/iletisim','İletişim']] as const;
+const links=[['/','Ana Sayfa'],['/koleksiyonlar','Koleksiyonlar'],['/urunler','Ürünler'],['/markamiz','Markamız'],['/musterilerimiz','Müşterilerimiz'],['/toptan-satis','Toptan Satış'],['/atolye','Atölye'],['/katalog','Katalog'],['/randevu','Randevu'],['/toptan-basvuru','B2B Başvuru'],['/toptan-sepet','Teklif Sepeti'],['/iletisim','İletişim']] as const;
 const languageNames:Record<Language,string>={tr:'Türkçe',en:'English',ar:'العربية'};
 export const Header:React.FC<HeaderProps>=({activeSection,onNavigate,onOpenFairModal})=>{
  const{language,setLanguage}=useAppImages();const[open,setOpen]=useState(false);
