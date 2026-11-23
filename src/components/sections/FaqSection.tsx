@@ -22,6 +22,20 @@ export const FaqSection: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('hepsi');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [openFaqId, setOpenFaqId] = useState<string | null>('faq-1');
+  const defaultFaqItems: FaqItem[] = [
+    { id: 'faq-default-1', question: 'İrem Comfort hangi ürünleri üretiyor?', answer: 'İrem Comfort, kadınlara yönelik hakiki deri terlik ve sandalet modelleri geliştirir. Koleksiyonlarımızda farklı saya, taban ve tasarım seçenekleri bulunur.', category: 'genel', isActive: true, isPopular: true },
+    { id: 'faq-default-2', question: 'Toptan satış yapıyor musunuz?', answer: 'Evet. İrem Comfort mağazalara ve perakende iş ortaklarına toptan satış ve sezonluk koleksiyon tedariki sunar. Ürün ve çalışma koşulları için toptan satış sayfamızdan başvuru bırakabilirsiniz.', category: 'toptan', isActive: true, isPopular: true },
+    { id: 'faq-default-3', question: 'Toptan sipariş için minimum adet var mı?', answer: 'Minimum sipariş adedi modele, renk ve numara dağılımına göre değişebilir. İhtiyacınızı ekibimizle paylaşarak güncel koşulları öğrenebilirsiniz.', category: 'toptan', isActive: true, isPopular: false },
+    { id: 'faq-default-4', question: 'Ürünlerde hangi malzemeler kullanılıyor?', answer: 'Ürün açıklamalarında her modelin saya ve taban malzemesi ayrı ayrı belirtilir. Model bazındaki malzeme bilgisi için ürün detaylarını inceleyebilir veya ekibimize danışabilirsiniz.', category: 'genel', isActive: true, isPopular: false },
+    { id: 'faq-default-5', question: 'Numara ve kalıp seçimini nasıl yapmalıyım?', answer: 'Kalıp yapısı modele göre farklılık gösterebilir. Sipariş öncesinde ilgili ürünün numara bilgisini ve varsa kalıp notunu kontrol etmenizi öneririz.', category: 'kalip', isActive: true, isPopular: true },
+    { id: 'faq-default-6', question: 'Hakiki deri terliklerin bakımını nasıl yapmalıyım?', answer: 'Deri ürünleri uzun süre suya ve doğrudan ısıya maruz bırakmayın. Yumuşak, kuru veya hafif nemli bir bezle temizleyin; deri türüne uygun bakım ürünleri kullanın.', category: 'bakim', isActive: true, isPopular: false },
+    { id: 'faq-default-7', question: 'Siparişler ne zaman hazırlanır ve teslim edilir?', answer: 'Hazırlık ve sevkiyat süresi sipariş içeriğine, stok durumuna ve üretim planına göre değişir. Kesin teslimat takvimi sipariş aşamasında paylaşılır.', category: 'kargo', isActive: true, isPopular: false },
+    { id: 'faq-default-8', question: 'Yurt dışına gönderim veya ihracat yapıyor musunuz?', answer: 'İrem Comfort farklı uluslararası pazarlara yönelik iş ortaklıkları yürütür. Ülke, miktar ve teslimat koşulları için bizimle iletişime geçebilirsiniz.', category: 'toptan', isActive: true, isPopular: false },
+    { id: 'faq-default-9', question: 'Koleksiyon kataloğunu nasıl inceleyebilirim?', answer: 'Web sitemizdeki Katalog bölümünden yayınlanan sezon kataloglarını inceleyebilirsiniz. Toptan iş ortaklığı için ürün seçiminizi ekibimizle paylaşabilirsiniz.', category: 'genel', isActive: true, isPopular: false },
+    { id: 'faq-default-10', question: 'Özel renk veya model talep edebilir miyim?', answer: 'Özel üretim talepleri modelin teknik uygunluğuna, malzeme teminine ve üretim adedine göre değerlendirilir. Talebinizi toptan satış ekibimize iletebilirsiniz.', category: 'toptan', isActive: true, isPopular: false }
+  ];
+  const visibleFaqItems = faqItems?.length ? faqItems : defaultFaqItems;
+
 
   const getCategoryLabel = (category: FaqItem['category']) => {
     switch (category) {
@@ -69,7 +83,7 @@ export const FaqSection: React.FC = () => {
 
   // Generate Schema.org FAQPage structured data dynamically for all active FAQ items
   const faqSchemaData = useMemo(() => {
-    const activeItems = faqItems.filter(item => item.isActive !== false);
+    const activeItems = visibleFaqItems.filter(item => item.isActive !== false);
     return {
       "@context": "https://schema.org",
       "@type": "FAQPage",
@@ -86,7 +100,7 @@ export const FaqSection: React.FC = () => {
         };
       })
     };
-  }, [faqItems, language]);
+  }, [visibleFaqItems, language]);
 
   // Filter active FAQs and apply search/category
   const filteredFaqs = useMemo(() => {
@@ -105,7 +119,7 @@ export const FaqSection: React.FC = () => {
         }
         return true;
       });
-  }, [faqItems, selectedCategory, searchQuery, language]);
+  }, [visibleFaqItems, selectedCategory, searchQuery, language]);
 
   const toggleFaq = (id: string) => {
     setOpenFaqId(prev => (prev === id ? null : id));
