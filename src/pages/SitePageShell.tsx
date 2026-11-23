@@ -8,7 +8,7 @@ import {CONTACT_DATA} from '../constants/data';
 interface SitePageShellProps{children:React.ReactNode;title:string;eyebrow?:string;intro?:string;activePath?:string;legal?:{open:(doc:any)=>void};onAdminClick?:()=>void;showHero?:boolean;}
 export const SitePageShell:React.FC<SitePageShellProps>=({children,title,eyebrow,intro,activePath,legal,onAdminClick,showHero=true})=>{
  const{language}=useAppImages();
- const nav=[['/','Ana Sayfa'],['/koleksiyonlar','Koleksiyonlar'],['/urunler','Ürünler'],['/markamiz','Markamız'],['/toptan-satis','Toptan Satış'],['/atolye','Atölye'],['/iletisim','İletişim']];
+ const nav=[['/','Ana Sayfa'],['/koleksiyonlar','Koleksiyonlar'],['/urunler','Ürünler'],['/markamiz','Markamız'],['/musterilerimiz','Müşterilerimiz'],['/toptan-satis','Toptan Satış'],['/atolye','Atölye'],['/iletisim','İletişim']];
  const current=nav.find(x=>x[0]===activePath)?.[1]||'İrem Comfort';
  return <div className="ic-site-page min-h-screen bg-[#f7f6f2] text-[#10294b]" lang={language}>
   <Header scrollY={0} activeSection={activePath||''} onNavigate={path=>{window.history.pushState({},'',path);window.dispatchEvent(new PopStateEvent('popstate'));}}/>
