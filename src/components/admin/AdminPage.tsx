@@ -2586,6 +2586,26 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
                             className="w-full px-3 py-1.5 text-xs rounded-lg border border-slate-300 focus:border-[#082C6C] focus:outline-none bg-white font-medium"
                           />
                         </div>
+                        <div>
+                          <label className="text-xs font-bold text-slate-700 block mb-1">Ana Koleksiyon</label>
+                          <input
+                            type="text"
+                            value={item.collectionGroup || ''}
+                            placeholder="Örn. Saraçlı Koleksiyon"
+                            onChange={(e) => updateCollectionItem(item.id, { collectionGroup: e.target.value })}
+                            className="w-full px-3 py-1.5 text-xs rounded-lg border border-slate-300 focus:border-[#082C6C] focus:outline-none bg-white font-semibold"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-xs font-bold text-slate-700 block mb-1">Alt Koleksiyon / Seçki</label>
+                          <input
+                            type="text"
+                            value={item.subCollection || ''}
+                            placeholder="Örn. Günlük Saraçlı"
+                            onChange={(e) => updateCollectionItem(item.id, { subCollection: e.target.value })}
+                            className="w-full px-3 py-1.5 text-xs rounded-lg border border-slate-300 focus:border-[#082C6C] focus:outline-none bg-white"
+                          />
+                        </div>
 
                         <div>
                           <label className="text-xs font-bold text-slate-700 block mb-1">Alt Başlık (Slogan)</label>
