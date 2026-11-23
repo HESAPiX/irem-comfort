@@ -59,46 +59,13 @@ export const FaqSection: React.FC = () => {
     { id: 'genel', label: language === 'tr' ? 'Genel Bilgi' : language === 'en' ? 'General Info' : 'معلومات عامة', icon: HelpCircle },
   ];
 
-  const translateFaq = (item?: FaqItem | null) => {
-    if (!item) return { question: '', answer: '' };
-    if (language === 'tr') return { question: item.question || '', answer: item.answer || '' };
-
-    const qLower = (item.question || '').toLowerCase();
-    if (qLower.includes('toptan') || qLower.includes('sipariş nasıl')) {
-      return {
-        question: language === 'en' ? 'How can I place a wholesale order?' : 'كيف يمكنني تقديم طلب بالجملة؟',
-        answer: language === 'en'
-          ? 'You can reach us via our WhatsApp hotline or contact form to request our wholesale catalog and price list. We offer custom production and volume discounts for boutique and store orders.'
-          : 'يمكنك التواصل معنا عبر رقم الواتساب أو نموذج الاتصال لطلب كتالوج الجملة وقائمة الأسعار. نوفر خصومات مميزة للمحلات وطلبات الكميات.'
-      };
-    }
-    if (qLower.includes('kargo') || qLower.includes('teslimat') || qLower.includes('termin') || qLower.includes('üretim')) {
-      return {
-        question: language === 'en' ? 'What is the production lead time for wholesale orders?' : 'ما هي مدة تجهيز وإنتاج طلبات الجملة؟',
-        answer: language === 'en'
-          ? 'The production lead time is 15–75 days depending on the models and scope of the order. The estimated schedule is confirmed after the order details are agreed.'
-          : 'تتراوح مدة تجهيز وإنتاج طلبات الجملة بين 15 و75 يوماً حسب الموديلات ونطاق الطلب. ويتم تأكيد الموعد التقديري بعد الاتفاق على تفاصيل الطلب.'
-      };
-    }
-    if (qLower.includes('deri bakımı') || qLower.includes('bakım') || qLower.includes('temizlen')) {
-      return {
-        question: language === 'en' ? 'How should genuine leather slippers and sandals be cared for?' : 'كيف يجب الاعتناء بالنعال والصنادل المصنوعة من جلد طبيعي؟',
-        answer: language === 'en'
-          ? 'Clean with a soft, slightly damp cloth. Avoid submerging in water or direct harsh sunlight. Natural leather nourishing creams or neutral beeswax care products can be applied periodically to maintain suppleness.'
-          : 'يُنظف بقطعة قماش ناعمة ومبللة قليلاً. تجنب الغمر بالماء أو التعرض للشمس المباشرة الحارة. يمكن استخدام كريم العناية بالجلد الطبيعي للحفاظ على مرونته.'
-      };
-    }
-    if (qLower.includes('kalıp') || qLower.includes('numara')) {
-      return {
-        question: language === 'en' ? 'Are your sizes true to standard shoe sizes?' : 'هل مقاسات وقوالب الأحذية مطابقة للمقاسات القياسية؟',
-        answer: language === 'en'
-          ? 'Yes, all our models are crafted with anatomically tested standard Turkish/European shoe lasts. We recommend selecting your usual shoe size. For wider feet or sabots, our customer team is happy to advise.'
-          : 'نعم، جميع موديلاتنا مصممة وفقاً للقوالب القياسية التركية/الأوروبية المختبرة طبياً. نوصي باختيار مقاسك المعتاد.'
-      };
-    }
-
-    return { question: item.question || '', answer: item.answer || '' };
-  };
+  // Keep the admin-managed Turkish source text intact. The site-wide
+  // translation observer translates every rendered question and answer,
+  // including newly added FAQ entries, into the selected language.
+  const translateFaq = (item?: FaqItem | null) => ({
+    question: item?.question || '',
+    answer: item?.answer || ''
+  });
 
   // Generate Schema.org FAQPage structured data dynamically for all active FAQ items
   const faqSchemaData = useMemo(() => {
