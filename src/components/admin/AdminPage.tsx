@@ -1286,6 +1286,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
   }
 
   // IF AUTHENTICATED: SHOW FULL ADMIN DASHBOARD
+  // Sadeleştirilmiş yönetim menüsü: günlük içerik işleri önde, teknik araçlar ayrı.
   const SIDEBAR_NAV_GROUPS: {
     groupTitle: string;
     items: {
@@ -1299,63 +1300,52 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
     }[];
   }[] = [
     {
-      groupTitle: 'SİTE SAYFALARI',
+      groupTitle: 'GENEL BAKIŞ',
       items: [
-        { id: 'overview', label: 'Dashboard', icon: Activity, badgeColor: 'text-emerald-400' },
+        { id: 'overview', label: 'Kontrol Paneli', icon: Activity, badgeColor: 'text-emerald-400' },
+      ]
+    },
+    {
+      groupTitle: 'SİTE İÇERİĞİ',
+      items: [
         { id: 'site_home', label: 'Ana Sayfa', icon: Home, badgeColor: 'text-[#D4AF37]' },
-        { id: 'site_brand', label: 'Markamız', icon: Star, badgeColor: 'text-[#D4AF37]' },
-        { id: 'site_workshop', label: 'Atölye', icon: Sparkles, badgeColor: 'text-amber-400' },
-        { id: 'site_wholesale', label: 'Toptan Satış', icon: ShoppingBag, badgeColor: 'text-emerald-400' },
-        { id: 'site_contact', label: 'İletişim', icon: Phone, badgeColor: 'text-blue-400' },
-        { id: 'appointments', label: 'Randevu Yönetimi', icon: Calendar, badgeColor: 'text-amber-400' },
-        { id: 'page_builder', label: 'Sayfa Yerleşimi / CMS', icon: Layout, badgeColor: 'text-amber-400' },
+        { id: 'collection', label: 'Ürünler & Koleksiyonlar', icon: Layers },
+        { id: 'site_brand', label: 'Markamız', icon: Star },
+        { id: 'site_workshop', label: 'Atölye', icon: Sparkles },
+        { id: 'site_wholesale', label: 'Toptan Satış', icon: ShoppingBag },
+        { id: 'site_contact', label: 'İletişim', icon: Phone },
+        { id: 'catalog_admin', label: 'Kataloglar', icon: BookOpen, badgeColor: 'text-[#D4AF37]' },
+        { id: 'media', label: 'Fotoğraf & Medya Kütüphanesi', icon: FileImage },
+        { id: 'appearance', label: 'Banner, Renk & Sayfa Düzeni', icon: Palette },
+        { id: 'page_builder', label: 'Sayfa Düzenleyici', icon: Layout },
+      ]
+    },
+    {
+      groupTitle: 'MÜŞTERİLER & İLETİŞİM',
+      items: [
+        { id: 'crm', label: 'Müşteri Kayıtları', icon: Users, badgeColor: 'text-emerald-400' },
+        { id: 'testimonials', label: 'Müşteri Yorumları & Referanslar', icon: Star },
+        { id: 'leads', label: 'Gelen Talepler', icon: MessageSquare, countBadge: contactLeads.length, badgeColor: 'text-emerald-400' },
+        { id: 'faq', label: 'Sıkça Sorulan Sorular', icon: HelpCircle },
+        { id: 'newsletter', label: 'E-posta Bülteni', icon: Mail, countBadge: subscribers.length, badgeColor: 'text-blue-400' },
+        { id: 'appointments', label: 'Randevular', icon: Calendar },
+      ]
+    },
+    {
+      groupTitle: 'KAMPANYA & DUYURULAR',
+      items: [
+        { id: 'contact', label: 'Duyuru Bandı & İletişim Bilgileri', icon: BellRing },
         { id: 'fair', label: 'Fuar & Etkinlik', icon: Calendar, hasPulse: true },
-        { id: 'appearance', label: 'Görünüm & Tema', icon: Palette, badgeColor: 'text-[#D4AF37]' },
       ]
     },
     {
-      groupTitle: 'GÖRSEL & İÇERİK',
+      groupTitle: 'SİSTEM AYARLARI',
       items: [
-        { id: 'general', label: 'Ana Sayfa & Hakkımızda', icon: Sliders },
-        { id: 'collection', label: `Ürün & Koleksiyon Yönetimi (${collectionItems.length})`, icon: Layers },
-        { id: 'trendyol_import', label: 'Trendyol Katalog Aktarımı', icon: FileSpreadsheet, badgeColor: 'text-emerald-400' },
-        { id: 'craftsmanship', label: 'Atölye & Zanaat', icon: Sparkles },
-        { id: 'presets', label: 'Hazır Görseller', icon: Eye },
-        { id: 'media', label: 'Medya Kütüphanesi', icon: FileImage, badgeColor: 'text-amber-400' },
-        { id: 'catalog_admin', label: 'Katalog Modülü & PDF Kütüphanesi', icon: BookOpen, badgeColor: 'text-[#D4AF37]' },
-      ]
-    },
-    {
-      groupTitle: 'MÜŞTERİ & İLETİŞİM',
-      items: [
-        { id: 'leads', label: 'Müşteri Talepleri', icon: MessageSquare, countBadge: contactLeads.length, badgeColor: 'text-emerald-400' },
-        { id: 'crm', label: 'Müşteriler & CRM', icon: Users, badgeColor: 'text-emerald-400' },
-        { id: 'testimonials', label: `Referanslar & Müşteri Yorumları (${testimonials.length})`, icon: Star, badgeColor: 'text-amber-400' },
-        { id: 'newsletter', label: 'Haber Bülteni', icon: Users, countBadge: subscribers.length, badgeColor: 'text-blue-400' },
-        { id: 'faq', label: 'Sıkça Sorulan Sorular', icon: HelpCircle, badgeColor: 'text-amber-400' },
-        { id: 'contact', label: 'İletişim & Duyuru Bandı', icon: Phone, badgeColor: 'text-emerald-400' },
-      ]
-    },
-    {
-      groupTitle: 'SİSTEM & AYARLAR',
-      items: [
-        { id: 'system', label: 'Deploy & GitHub Yayınlama', icon: Server, badgeColor: 'text-[#D4AF37]', isDeployingBadge: systemConfig.isDeploying },
-        { id: 'email', label: 'E-Posta & SMTP Ayarları', icon: Mail, badgeColor: 'text-amber-500' },
-        { id: 'seo', label: 'SEO, Robots & Sitemap', icon: Globe, badgeColor: 'text-emerald-400' },
-        { id: 'analytics', label: 'Analiz & Performans', icon: BarChart3, badgeColor: 'text-amber-400' },
-        { id: 'security', label: 'Güvenlik Merkezi', icon: ShieldCheck, badgeColor: 'text-[#D4AF37]' },
-        { id: 'deployment_exp', label: 'Deployment Deneyimi (Video)', icon: Video, badgeColor: 'text-[#D4AF37]' },
-        { id: 'backup', label: 'Yedekleme & Geri Yükleme', icon: Database, badgeColor: 'text-indigo-400' },
-      ]
-    },
-    {
-      groupTitle: 'AI & OTOMASYON',
-      items: [
-        { id: 'ai_arch', label: 'AI Altyapısı', icon: Sparkles, badgeColor: 'text-indigo-400' },
-        { id: 'live_monitor', label: 'Canlı Monitör & Destek', icon: Activity, badgeColor: 'text-emerald-400' },
-        { id: 'ai_training', label: 'AI Eğitim Merkezi', icon: GraduationCap, badgeColor: 'text-[#D4AF37]' },
-        { id: 'infrastructure', label: 'Enterprise Altyapı', icon: Server, badgeColor: 'text-emerald-400' },
-        { id: 'conv_logs', label: 'Sohbet Günlükleri & AI Beta', icon: MessageSquare, badgeColor: 'text-amber-400' },
+        { id: 'system', label: 'Kaydetme & Yayınlama', icon: GitBranch, badgeColor: 'text-[#D4AF37]', isDeployingBadge: systemConfig.isDeploying },
+        { id: 'email', label: 'E-posta Gönderim Ayarları', icon: Mail },
+        { id: 'seo', label: 'SEO Ayarları', icon: Globe },
+        { id: 'security', label: 'Güvenlik', icon: ShieldCheck },
+        { id: 'backup', label: 'Yedekleme & Geri Yükleme', icon: Database },
       ]
     }
   ];
