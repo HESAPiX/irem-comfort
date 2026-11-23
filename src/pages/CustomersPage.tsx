@@ -37,8 +37,8 @@ export const CustomersPage:React.FC<{onAdminClick?:()=>void;openLegal?:(d:any)=>
       <div><div className="flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[.22em] text-[#a47c36]"><Globe2 size={15}/> Uluslararası pazarlar</div><h2 className="mt-2 font-serif-luxury text-2xl sm:text-3xl">İhracat yaptığımız ülkeler</h2></div>
       <p className="max-w-md text-xs leading-6 text-slate-500">İrem Comfort koleksiyonlarının ulaştığı pazarlar.</p>
      </div>
-     <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
-      {exportMarkets.map(({flag,country})=><div key={country} className="flex items-center gap-3 rounded-xl border border-[#e8e3d9] bg-white px-3.5 py-3 shadow-[0_2px_10px_rgba(16,41,75,.025)] hover:border-[#d8b56a] transition"><span className="text-[25px] leading-none" aria-hidden="true">{flag}</span><span className="text-xs sm:text-sm font-semibold">{country}</span></div>)}
+     <div className="mt-6 mx-auto max-w-3xl grid grid-cols-1 gap-2.5">
+      {exportMarkets.map(({flag,country})=><div key={country} className="group flex min-h-[64px] items-center gap-4 rounded-xl border border-[#e8e3d9] bg-white px-4 py-3 shadow-[0_2px_10px_rgba(16,41,75,.025)] transition hover:-translate-y-0.5 hover:border-[#d8b56a] hover:shadow-[0_8px_20px_rgba(16,41,75,.07)]"><span className="flex h-10 w-14 shrink-0 items-center justify-center rounded-lg bg-[#f8f7f4] text-[30px] leading-none shadow-inner" aria-hidden="true">{flag}</span><span className="flex-1 text-sm font-semibold">{country}</span><span className="text-[9px] font-extrabold uppercase tracking-[.2em] text-[#a47c36]">İhracat pazarı</span></div>)}
      </div>
     </div>
    </section>
