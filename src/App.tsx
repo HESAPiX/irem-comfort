@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { installPageTranslation } from './utils/pageTranslation';
 import { ImageProvider, useAppImages } from './context/ImageContext';
 import { ConversationProvider } from './context/ConversationContext';
 import { IcLoader } from './components/ui/IcLoader';
@@ -26,10 +27,12 @@ import { WholesaleQuoteCartPage } from './pages/WholesaleQuoteCartPage';
 import { PublicEngagementPopups } from './components/ui/PublicEngagementPopups';
 
 function MainAppContent() {
-  const { isSettingsLoaded, systemConfig } = useAppImages();
+  const { isSettingsLoaded, systemConfig, language } = useAppImages();
   const getPath = () => (typeof window === 'undefined' ? '/' : window.location.pathname.replace(/\/+$/, '') || '/');
   const [path, setPath] = useState(getPath);
   const [legalDoc, setLegalDoc] = useState<LegalDocType | null>(null);
+
+  useEffect(() => installPageTranslation(language), [language]);
 
   useEffect(() => {
     const onPop = () => setPath(getPath());
