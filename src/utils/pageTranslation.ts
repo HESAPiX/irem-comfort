@@ -8,13 +8,13 @@ const isTranslatable = (node: Text) => {
   const value = node.nodeValue || "";
   const parent = node.parentElement;
   if (!parent || !value.trim() || value.trim().length < 2 || ignoredTags.has(parent.tagName)) return false;
-  if (parent.closest('[translate="no"],[contenteditable="true"],.notranslate,[aria-hidden="true"]')) return false;
+  if (parent.closest('[translate="no"],[data-no-auto-translate="true"],[contenteditable="true"],.notranslate,[aria-hidden="true"]')) return false;
   if (/^[\d\s.,:%+\-/#()]+$/.test(value.trim())) return false;
   return true;
 };
 async function translateBatch(nodes: Text[], target: string) {
-  for (let i=0; i<nodes.length; i+=35) {
-    const batch=nodes.slice(i,i+35);
+  for (let i=0; i<nodes.length; i+=6) {
+    const batch=nodes.slice(i,i+6);
     const sources=batch.map(n=>originals.get(n)||n.nodeValue||"");
     try {
       const response=await fetch("/api/translate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({texts:sources,target})});
