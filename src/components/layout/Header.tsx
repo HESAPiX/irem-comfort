@@ -21,7 +21,7 @@ export const Header:React.FC<HeaderProps>=({activeSection,onNavigate,onOpenFairM
    <div className="max-w-[1440px] mx-auto px-4 sm:px-7 h-[68px] flex items-center justify-between gap-4">
     <button onClick={()=>go('/')} className="shrink-0" aria-label="İrem Comfort ana sayfa"><LogoFull iconSize={40} color="#102f59" showText/></button>
     <div className="flex items-center gap-2 sm:gap-3">
-     <button onClick={cycleLanguage} className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-2 text-[11px] font-bold text-[#102f59] hover:border-[#b8862f]"><Globe className="w-3.5 h-3.5"/>{language.toUpperCase()}</button>
+     <button onClick={cycleLanguage} data-no-auto-translate="true" translate="no" aria-label="Dil seçimi" className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-2 text-[11px] font-bold text-[#102f59] hover:border-[#b8862f]"><Globe className="w-3.5 h-3.5"/><span translate="no">{language.toUpperCase()}</span></button>
      <button onClick={()=>go('/toptan-satis')} className="hidden sm:inline-flex items-center gap-2 rounded-full bg-[#102f59] text-white px-4 py-2.5 text-[11px] font-extrabold shadow-sm hover:bg-[#183e6d]">Toptan Teklif <ArrowUpRight className="w-4 h-4"/></button>
      <button onClick={()=>setOpen(!open)} className="lg:hidden p-2.5 rounded-xl bg-[#102f59]/5 text-[#102f59]" aria-label="Menüyü aç/kapat">{open?<X/>:<Menu/>}</button>
     </div>
