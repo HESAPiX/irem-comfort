@@ -238,7 +238,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
     }
   };
 
-  const [githubRepoInput, setGithubRepoInput] = useState<string>(() => systemConfig.githubRepo || localStorage.getItem('irem_github_repo') || 'HESAPiX/irem-comfort');
+  const [githubRepoInput, setGithubRepoInput] = useState<string>(() => { const savedRepo = systemConfig.githubRepo || localStorage.getItem('irem_github_repo') || 'HESAPiX/irem-comfort'; return savedRepo === 'kadirkarga25-rgb/irem-comfort' ? 'HESAPiX/irem-comfort' : savedRepo; });
   const [githubBranchInput, setGithubBranchInput] = useState<string>(() => systemConfig.githubBranch || localStorage.getItem('irem_github_branch') || 'main');
   const [githubTokenInput, setGithubTokenInput] = useState<string>('');
   const [isTestingGithub, setIsTestingGithub] = useState(false);
