@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, CheckCircle2, Factory, PackageCheck, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Factory, PackageCheck, ShieldCheck } from 'lucide-react';
 import { SitePageShell } from './SitePageShell';
 import { useAppImages } from '../context/ImageContext';
 import { COLLECTION_ITEMS, PREMIUM_PRODUCT_IMAGE_FALLBACKS } from '../constants/data';
