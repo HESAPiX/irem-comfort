@@ -4,6 +4,7 @@ let observer: MutationObserver | null = null;
 let currentTarget: "tr" | "en" | "ar" = "tr";
 let scanQueued = false;
 let translationRun = 0;
+const CACHE_PREFIX = "irem_page_translation_v2:";
 const ignoredTags = new Set(["SCRIPT","STYLE","NOSCRIPT","SVG","PATH","TEXTAREA","INPUT","OPTION","CODE","PRE"]);
 const isTranslatable = (node: Text) => {
   const value = node.nodeValue || "";
@@ -13,35 +14,54 @@ const isTranslatable = (node: Text) => {
   if (/^[\d\s.,:%+\-/#()]+$/.test(value.trim())) return false;
   return true;
 };
+const cacheKey = (target: "en" | "ar", source: string) => CACHE_PREFIX + target + ":" + source;
+function readCache(target: "en" | "ar", source: string): string | null {
+  try { return localStorage.getItem(cacheKey(target, source)); } catch { return null; }
+}
+function writeCache(target: "en" | "ar", source: string, translated: string) {
+  try { localStorage.setItem(cacheKey(target, source), translated); } catch { /* Storage may be unavailable or full. */ }
+}
 async function translateBatch(nodes: Text[], target: "en" | "ar", runId: number) {
-  for (let i = 0; i < nodes.length; i += 5) {
+  const pending: {node:Text;source:string}[] = [];
+  nodes.forEach(node => {
+    if (!node.isConnected) return;
+    const source = originals.get(node) || node.nodeValue || "";
+    const cached = readCache(target, source);
+    if (cached) {
+      translatedValue.set(node, cached);
+      node.nodeValue = cached;
+    } else pending.push({node,source});
+  });
+  // The API accepts up to 40 strings. Larger batches reduce the time spent
+  // waiting between sequential requests when a page contains many text nodes.
+  for (let i = 0; i < pending.length; i += 35) {
     if (runId !== translationRun || currentTarget !== target) return;
-    const batch = nodes.slice(i, i + 5).filter(n => n.isConnected);
+    const batch = pending.slice(i, i + 35).filter(item => item.node.isConnected);
     if (!batch.length) continue;
-    const sources = batch.map(n => originals.get(n) || n.nodeValue || "");
     try {
       const response = await fetch("/api/translate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ texts: sources, target })
+        body: JSON.stringify({ texts: batch.map(item => item.source), target })
       });
       if (!response.ok) throw new Error(`Translation request failed (${response.status})`);
       const data = await response.json();
       if (runId !== translationRun || currentTarget !== target) return;
-      batch.forEach((node, index) => {
+      batch.forEach((item, index) => {
         const translated = data.translations?.[index];
-        if (node.isConnected && typeof translated === "string" && translated.trim()) {
-          translatedValue.set(node, translated);
-          node.nodeValue = translated;
+        if (item.node.isConnected && typeof translated === "string" && translated.trim()) {
+          writeCache(target, item.source, translated);
+          translatedValue.set(item.node, translated);
+          item.node.nodeValue = translated;
         }
       });
     } catch (error) {
       console.warn("İrem Comfort translation unavailable; original text kept.", error);
-      // Keep processing later batches; one failed request must not stop the whole page.
+      // Continue with later batches; a single provider failure must not stop the page.
     }
   }
 }
-function collect(root: Node, includeKnown = false) {
+function collect(root: Node) {
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
   const found: Text[] = [];
   let node: Node | null;
@@ -49,13 +69,12 @@ function collect(root: Node, includeKnown = false) {
     const text = node as Text;
     if (!isTranslatable(text)) continue;
     if (!originals.has(text)) originals.set(text, text.nodeValue || "");
-    if (includeKnown || !translatedValue.has(text)) found.push(text);
+    found.push(text);
   }
   return found;
 }
 async function translateNodes(nodes: Text[], target: "en" | "ar") {
-  const runId = translationRun;
-  await translateBatch(nodes, target, runId);
+  await translateBatch(nodes, target, translationRun);
 }
 export function installPageTranslation(target: "tr" | "en" | "ar") {
   currentTarget = target;
@@ -64,8 +83,8 @@ export function installPageTranslation(target: "tr" | "en" | "ar") {
   if (observer) observer.disconnect();
   observer = null;
 
-  // Always restore the immutable Turkish source first. Re-translate every
-  // connected text node, including nodes translated during a previous language.
+  // Turkish is the immutable source language; restore it before applying
+  // another language so switching EN <-> AR never translates a translation.
   if (target === "tr") {
     document.documentElement.lang = "tr";
     document.documentElement.dir = "ltr";
@@ -105,12 +124,11 @@ export function installPageTranslation(target: "tr" | "en" | "ar") {
       records.forEach(record => {
         if (record.type === "characterData" && record.target.nodeType === Node.TEXT_NODE) {
           const text = record.target as Text;
-          // Ignore our own translated writes; external edits become new source text.
+          // Ignore our own translated writes; new CMS/admin text is a fresh Turkish source.
           if (translatedValue.has(text) && text.nodeValue === translatedValue.get(text)) return;
-          if (!translatedValue.has(text)) {
-            originals.set(text, text.nodeValue || "");
-            fresh.push(text);
-          }
+          originals.set(text, text.nodeValue || "");
+          translatedValue.delete(text);
+          if (isTranslatable(text)) fresh.push(text);
         }
         record.addedNodes.forEach(added => {
           if (added.nodeType === Node.TEXT_NODE) {
