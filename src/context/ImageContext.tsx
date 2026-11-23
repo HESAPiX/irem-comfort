@@ -409,7 +409,7 @@ export const DEFAULT_SYSTEM_CONFIG: SystemConfig = {
   isDeploying: false,
   lastDeployedAt: null,
   deployingMessage: "Website update is in progress.\nThe new version will be available in about 1 minute.",
-  githubRepo: "kadirkarga25-rgb/irem-comfort",
+  githubRepo: "HESAPiX/irem-comfort",
   githubBranch: "main",
   stage1Text: "Sitemizin güncellenmesi tamamlanıyor, beklediğiniz için teşekkürler.",
   stage2Text: "Sitemiz güncellendi, hoş geldiniz!",
@@ -1245,7 +1245,7 @@ export const ImageProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     // Geri yüklemeyi yalnızca ekranda bırakma; aynı tam paket yeni yayın sistemiyle
     // GitHub'a da gönder. Böylece 12 ürün gizli sekmede / başka cihazda da kalıcı olur.
-    const repo = restoredSystemConfig.githubRepo || localStorage.getItem('irem_github_repo') || 'kadirkarga25-rgb/irem-comfort';
+    const repo = restoredSystemConfig.githubRepo || localStorage.getItem('irem_github_repo') || 'HESAPiX/irem-comfort';
     const branch = restoredSystemConfig.githubBranch || localStorage.getItem('irem_github_branch') || 'main';
     const response = await fetch('/api/publish-settings', {
       method: 'POST',
@@ -1287,7 +1287,7 @@ export const ImageProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         signal: controller.signal,
         body: JSON.stringify({
           settings: currentStateObj,
-          repo: systemConfig.githubRepo || localStorage.getItem('irem_github_repo') || 'kadirkarga25-rgb/irem-comfort',
+          repo: systemConfig.githubRepo || localStorage.getItem('irem_github_repo') || 'HESAPiX/irem-comfort',
           branch: systemConfig.githubBranch || localStorage.getItem('irem_github_branch') || 'main',
           commitMessage: 'Admin: Site değişiklikleri yayınlandı'
         })
@@ -1348,7 +1348,7 @@ export const ImageProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const startedAt = Date.now();
     updateSystemConfig({ isDeploying: true, lastDeployedAt: new Date().toISOString() });
 
-    const repoToSend = systemConfig.githubRepo || localStorage.getItem('irem_github_repo') || 'kadirkarga25-rgb/irem-comfort';
+    const repoToSend = systemConfig.githubRepo || localStorage.getItem('irem_github_repo') || 'HESAPiX/irem-comfort';
     const branchToSend = systemConfig.githubBranch || localStorage.getItem('irem_github_branch') || 'main';
     const freshStatePayload = getCurrentAdminState({
       ...(additionalState || {}),
