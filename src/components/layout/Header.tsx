@@ -21,14 +21,16 @@ export const Header:React.FC<HeaderProps>=({activeSection,onNavigate,onOpenFairM
  const go=(path:string)=>{setOpen(false);if(path!==window.location.pathname)window.history.pushState({},'',path);onNavigate(path);window.scrollTo({top:0,behavior:'smooth'});};
  const chooseLanguage=(code:Language)=>{setLanguage(code);setLanguageOpen(false);};
  const languageMenu=<div className="relative" data-no-auto-translate="true" translate="no">
-  <button onClick={()=>setLanguageOpen(v=>!v)} data-no-auto-translate="true" translate="no" aria-haspopup="menu" aria-expanded={languageOpen} className="inline-flex items-center gap-2.5 rounded-full border border-slate-200 bg-white px-3.5 py-2.5 text-[11px] font-bold text-[#102f59] shadow-[0_2px_8px_rgba(16,41,75,.04)] hover:border-[#b8862f] hover:shadow-sm transition">
-   <span className="text-[11px] font-extrabold tracking-wide">{selected.code==='tr'?'TR':selected.code==='en'?'GB':'SA'}</span><span className="uppercase">{selected.code.toUpperCase()}</span><ChevronDown size={13}/>
+  <button onClick={()=>setLanguageOpen(v=>!v)} data-no-auto-translate="true" translate="no" aria-haspopup="menu" aria-expanded={languageOpen} className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 shadow-[0_2px_8px_rgba(16,41,75,.05)] hover:border-[#b8862f] hover:shadow-sm transition">
+   <span className="grid h-7 w-9 place-items-center overflow-hidden rounded-md bg-[#f5f3ee] text-[25px] leading-none">{selected.flag}</span>
+   <span className="text-[11px] font-extrabold uppercase tracking-wide text-[#102f59]">{selected.code}</span><ChevronDown size={13} className="text-[#102f59]"/>
   </button>
-  <AnimatePresence>{languageOpen&&<motion.div initial={{opacity:0,y:-7,scale:.98}} animate={{opacity:1,y:0,scale:1}} exit={{opacity:0,y:-7,scale:.98}} transition={{duration:.16}} className="absolute right-0 top-full mt-2 w-44 overflow-hidden rounded-2xl border border-slate-200 bg-white p-1.5 shadow-[0_16px_40px_rgba(16,41,75,.16)] z-[80]" role="menu" data-no-auto-translate="true" translate="no">
-   {languageOptions.map(option=><button key={option.code} type="button" role="menuitem" onClick={()=>chooseLanguage(option.code)} data-no-auto-translate="true" translate="no" className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-xs font-semibold text-[#102f59] transition-colors ${language===option.code?'bg-[#f5f3ee]':'hover:bg-[#f5f3ee]/75'}`}>
-    <span className="w-6 shrink-0 text-[11px] font-extrabold tracking-wide">{option.code==='tr'?'TR':option.code==='en'?'GB':'SA'}</span>
-    <span className="flex-1 whitespace-nowrap">{option.native}</span>
-    {language===option.code&&<Check size={14} className="text-[#a47c36]"/>}
+  <AnimatePresence>{languageOpen&&<motion.div initial={{opacity:0,y:-7,scale:.98}} animate={{opacity:1,y:0,scale:1}} exit={{opacity:0,y:-7,scale:.98}} transition={{duration:.16}} className="absolute right-0 top-full mt-2 w-56 overflow-hidden rounded-2xl border border-slate-200 bg-white p-1.5 shadow-[0_16px_40px_rgba(16,41,75,.18)] z-[80]" role="menu" data-no-auto-translate="true" translate="no">
+   {languageOptions.map(option=><button key={option.code} type="button" role="menuitem" onClick={()=>chooseLanguage(option.code)} data-no-auto-translate="true" translate="no" className={`relative isolate flex h-[58px] w-full items-center gap-3 overflow-hidden rounded-xl px-3 text-left text-xs font-semibold text-[#102f59] transition-all ${language===option.code?'bg-[#f5f3ee] ring-1 ring-[#b8862f]/25':'hover:bg-[#f5f3ee]/75'}`}>
+    <span aria-hidden="true" className="pointer-events-none absolute right-2 top-1/2 -z-10 -translate-y-1/2 select-none text-[43px] leading-none opacity-[.24]">{option.flag}</span>
+    <span className="grid h-9 w-12 shrink-0 place-items-center overflow-hidden rounded-lg border border-white/80 bg-white/75 text-[31px] leading-none shadow-sm">{option.flag}</span>
+    <span className="flex-1 whitespace-nowrap font-bold">{option.native}</span>
+    {language===option.code&&<Check size={15} className="text-[#a47c36]"/>}
    </button>)}
   </motion.div>}</AnimatePresence>
  </div>
