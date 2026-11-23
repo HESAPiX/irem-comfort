@@ -59,7 +59,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   const handleCardClick = () => {
-    onSelect(item, activeColorName);
+    window.location.href = `/urunler/${encodeURIComponent(item.id)}`;
   };
 
   return (
