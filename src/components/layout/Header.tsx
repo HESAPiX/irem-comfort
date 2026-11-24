@@ -1,6 +1,6 @@
 import React,{useState} from 'react';
 import {motion,AnimatePresence} from 'motion/react';
-import {LogoFull} from '../brand/LogoFull';
+
 import {Menu,X,PhoneCall,ChevronRight,ArrowUpRight,ChevronDown,Check} from 'lucide-react';
 import {CONTACT_DATA} from '../../constants/data';
 import {AnnouncementTicker} from './AnnouncementTicker';
@@ -39,7 +39,7 @@ export const Header:React.FC<HeaderProps>=({activeSection,onNavigate,onOpenFairM
  <motion.header initial={{y:-70,opacity:0}} animate={{y:0,opacity:1}} className="fixed top-0 left-0 right-0 z-40">
   <div className="relative z-[60] bg-white/95 backdrop-blur-xl border-b border-[#102f59]/10 shadow-[0_5px_24px_rgba(16,47,89,.07)]">
    <div className="max-w-[1440px] mx-auto px-4 sm:px-7 h-[70px] flex items-center justify-between gap-4">
-    <button onClick={()=>go('/')} className="shrink-0" aria-label="İrem Comfort ana sayfa"><LogoFull iconSize={40} color="#102f59" showText/></button>
+    <button onClick={()=>go('/')} className="shrink-0" aria-label="İrem Comfort ana sayfa"><img src="/brand/irem-comfort-logo-full.svg?v=20261124-2" alt="İrem Comfort" width={213} height={40} className="block h-10 w-[213px] max-w-none shrink-0 object-contain" style={{ flex: "0 0 213px" }} draggable={false} /></button>
     <div className="flex items-center gap-2 sm:gap-3">
      <div className="hidden sm:block">{languageMenu}</div>
      <button onClick={()=>go('/toptan-satis')} className="hidden sm:inline-flex items-center gap-2 rounded-full bg-[#102f59] text-white px-4 py-2.5 text-[11px] font-extrabold shadow-sm hover:bg-[#183e6d]">Toptan Teklif <ArrowUpRight className="w-4 h-4"/></button>
