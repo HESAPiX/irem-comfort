@@ -77,7 +77,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <img
             src={activeImage}
             alt={`${item.name} - ${activeColorName || ''}`}
-            className="w-full h-full object-cover object-center group-hover:scale-108 transition-all duration-500 ease-out"
+            className="w-full h-full object-contain object-center p-3 sm:p-4 transition-all duration-500 ease-out"
           />
         ) : (
           <div className="p-6 text-center text-white space-y-2">
