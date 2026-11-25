@@ -103,7 +103,6 @@ async function uploadImageToGithub(dataUrl: string, folder: string = "site_image
 export interface AppImages {
   heroImage: string;
   homeSecondaryImage: string;
-  homeBrandImage: string;
   aboutImage: string;
   craftsmanshipImages: Record<string, string>; // step number -> image url
   craftsmanshipHeroImage: string; // Atölye sayfası üst banner görseli
@@ -189,7 +188,6 @@ const getDefaultImages = (): AppImages => {
   return {
     heroImage: DEFAULT_HERO_IMAGE,
     homeSecondaryImage: '',
-    homeBrandImage: '',
     aboutImage: DEFAULT_ABOUT_IMAGE,
     craftsmanshipImages: craftMap,
     craftsmanshipHeroImage: '',
@@ -212,7 +210,7 @@ export interface DeploymentProgress {
 interface ImageContextType {
   images: AppImages;
   updateHeroImage: (url: string) => void;
-  updateHomeVisual: (field: 'heroImage' | 'homeSecondaryImage' | 'homeBrandImage', url: string) => void;
+  updateHomeVisual: (field: 'heroImage' | 'homeSecondaryImage', url: string) => void;
   updateAboutImage: (url: string) => void;
   updateCraftsmanshipImage: (stepNumber: string, url: string) => void;
   updateCraftsmanshipHeroImage: (url: string) => void;

@@ -9,7 +9,7 @@ import {LogoIC} from '../components/brand/LogoIC';
 export const HomePage:React.FC<{onAdminClick?:()=>void;openLegal?:(d:any)=>void}>=({onAdminClick,openLegal})=>{
  const{collectionItems,images}=useAppImages();const all=collectionItems?.length?collectionItems:COLLECTION_ITEMS;
  const featured=all.filter(x=>x.isFeatured);const products=(featured.length?featured:all).slice(0,4);
- const hero=images.heroImage||all.find(x=>x.image)?.image||'';const secondary=images.homeSecondaryImage||'';const brandVisual=images.homeBrandImage||'';
+ const hero=images.heroImage||all.find(x=>x.image)?.image||'';const secondary=images.homeSecondaryImage||'';
  return <SitePageShell title="" activePath="/" showHero={false} onAdminClick={onAdminClick} legal={{open:openLegal!}}>
  <main className="bg-[#f8f7f3] text-[#142b4b]">
   <section className="relative min-h-[690px] lg:min-h-[760px] overflow-hidden bg-[#10294b] text-white">
@@ -25,7 +25,7 @@ export const HomePage:React.FC<{onAdminClick?:()=>void;openLegal?:(d:any)=>void}
     <div className="relative min-h-[420px] sm:min-h-[570px] lg:min-h-[620px]">
      <div className="absolute right-0 top-0 w-[78%] h-[88%] overflow-hidden rounded-t-[48%] rounded-b-[18px] border border-white/15 bg-[#d8d2c8] shadow-2xl">{hero?<img src={hero} alt="İrem Comfort sezon koleksiyonu" className="w-full h-full object-contain bg-white"/>:<div className="w-full h-full bg-gradient-to-br from-[#e7e1d7] to-[#b7aa98] flex items-center justify-center"><LogoIC size={120}/></div>}</div>
      <div className="absolute left-0 bottom-0 w-[42%] h-[42%] rounded-[22px] overflow-hidden border-[7px] border-[#10294b] bg-white shadow-2xl">{secondary?<img src={secondary} alt="İrem Comfort ürün detayı" className="w-full h-full object-contain bg-white"/>:<div className="w-full h-full flex items-center justify-center text-xs text-slate-400">Küçük görsel seçin</div>}</div>
-     {brandVisual&&<div className="absolute right-[14%] top-[18%] w-[42%] h-[48%] rounded-t-full rounded-b-xl bg-white flex items-center justify-center shadow-2xl overflow-hidden"><img src={brandVisual} alt="İrem Comfort amblemi" className="max-w-full max-h-full object-contain p-5"/></div>}<div className="absolute right-0 bottom-2 rounded-2xl border border-white/15 bg-[#18395f]/90 backdrop-blur px-5 py-4 shadow-xl"><div className="text-[9px] uppercase tracking-[.2em] text-[#d7b875] font-bold">Yeni sezon</div><div className="mt-1 font-serif-luxury text-xl">2026 / 2027</div></div>
+     <div className="absolute right-0 bottom-2 rounded-2xl border border-white/15 bg-[#18395f]/90 backdrop-blur px-5 py-4 shadow-xl"><div className="text-[9px] uppercase tracking-[.2em] text-[#d7b875] font-bold">Yeni sezon</div><div className="mt-1 font-serif-luxury text-xl">2026 / 2027</div></div>
     </div>
    </div>
    <div className="absolute bottom-0 inset-x-0 border-t border-white/10"><div className="max-w-[1500px] mx-auto px-5 sm:px-10 lg:px-16 py-4 flex flex-wrap justify-between gap-3 text-[9px] sm:text-[10px] uppercase tracking-[.18em] text-white/55"><span>Hakiki deri seçkisi</span><span>Konfor odaklı kalıplar</span><span>Manisa üretimi</span><span>Toptan iş ortaklığı</span></div></div>

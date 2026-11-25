@@ -40,7 +40,7 @@ export const SitePageEditorAdminTab: React.FC<Props> = ({ page }) => {
   const openPicker = (target:'brand'|'workshop'|'workshopHero'|'homeVisual', id:string, title:string) => setPicker({open:true,target,id,title});
   const closePicker = () => setPicker(prev=>({...prev,open:false}));
   const selectPickerImage = (url:string) => {
-    if (picker.target === 'homeVisual') updateHomeVisual(picker.id as 'heroImage'|'homeSecondaryImage'|'homeBrandImage', url);
+    if (picker.target === 'homeVisual') updateHomeVisual(picker.id as 'heroImage'|'homeSecondaryImage', url);
     else if (picker.target === 'brand') updateAboutSlide(picker.id,{image:url});
     else if (picker.target === 'workshopHero') updateCraftsmanshipHeroImage(url);
     else updateCraftsmanshipStep(picker.id,{image:url});
@@ -74,9 +74,8 @@ export const SitePageEditorAdminTab: React.FC<Props> = ({ page }) => {
         <div className="grid md:grid-cols-3 gap-4">
           {([
             ['heroImage','Büyük ana görsel',images.heroImage],
-            ['homeSecondaryImage','Öndeki küçük görsel',images.homeSecondaryImage],
-            ['homeBrandImage','Dairesel logo / amblem',images.homeBrandImage]
-          ] as const).map(([field,title,url])=><div key={field} className="rounded-xl border border-slate-200 p-3 space-y-3">
+            ['homeSecondaryImage','Küçük görsel / logo',images.homeSecondaryImage]
+                      ] as const).map(([field,title,url])=><div key={field} className="rounded-xl border border-slate-200 p-3 space-y-3">
             <div className="text-sm font-bold text-slate-800">{title}</div>
             <div className="aspect-[4/3] rounded-lg overflow-hidden bg-slate-100 flex items-center justify-center">{url?<img src={url} alt={title} className="w-full h-full object-contain bg-white"/>:<span className="text-xs text-slate-400">Henüz görsel seçilmedi</span>}</div>
             <button type="button" onClick={()=>openPicker('homeVisual',field,title)} className="w-full px-3 py-2.5 rounded-xl bg-[#142F55] text-white text-xs font-bold">Medya Kütüphanesinden Seç</button>
