@@ -1310,6 +1310,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
       items: [
         { id: 'site_home', label: 'Ana Sayfa', icon: Home, badgeColor: 'text-[#D4AF37]' },
         { id: 'collection', label: 'Ürünler & Koleksiyonlar', icon: Layers },
+        { id: 'trendyol_import', label: 'Trendyol Ürün Aktarımı', icon: ShoppingBag, badgeColor: 'text-[#B8862F]' },
         { id: 'site_brand', label: 'Markamız', icon: Star },
         { id: 'site_workshop', label: 'Atölye', icon: Sparkles },
         { id: 'site_wholesale', label: 'Toptan Satış', icon: ShoppingBag },
