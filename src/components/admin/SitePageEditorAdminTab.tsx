@@ -29,17 +29,19 @@ export const SitePageEditorAdminTab: React.FC<Props> = ({ page }) => {
     aboutSlides, updateAboutSlide, deleteAboutSlide,
     craftsmanshipSteps, updateCraftsmanshipStep,
     updateCraftsmanshipHeroImage,
+    updateHomeVisual,
     collectionItems, updateCollectionItem,
     contactData, updateContactData,
     images,
     faqItems, updateFaqItem, deleteFaqItem,
   } = useAppImages();
   const [saved, setSaved] = useState(false);
-  const [picker, setPicker] = useState<{open:boolean; target:'brand'|'workshop'|'workshopHero'; id:string; title:string}>({open:false,target:'brand',id:'',title:''});
-  const openPicker = (target:'brand'|'workshop'|'workshopHero', id:string, title:string) => setPicker({open:true,target,id,title});
+  const [picker, setPicker] = useState<{open:boolean; target:'brand'|'workshop'|'workshopHero'|'homeVisual'; id:string; title:string}>({open:false,target:'brand',id:'',title:''});
+  const openPicker = (target:'brand'|'workshop'|'workshopHero'|'homeVisual', id:string, title:string) => setPicker({open:true,target,id,title});
   const closePicker = () => setPicker(prev=>({...prev,open:false}));
   const selectPickerImage = (url:string) => {
-    if (picker.target === 'brand') updateAboutSlide(picker.id,{image:url});
+    if (picker.target === 'homeVisual') updateHomeVisual(picker.id as 'heroImage'|'homeSecondaryImage'|'homeBrandImage', url);
+    else if (picker.target === 'brand') updateAboutSlide(picker.id,{image:url});
     else if (picker.target === 'workshopHero') updateCraftsmanshipHeroImage(url);
     else updateCraftsmanshipStep(picker.id,{image:url});
     closePicker();
@@ -67,10 +69,19 @@ export const SitePageEditorAdminTab: React.FC<Props> = ({ page }) => {
         <div className="grid sm:grid-cols-2 gap-3"><Field label="Birincil buton" value={heroConfig.primaryBtnText || ''} onChange={v=>updateHeroConfig({primaryBtnText:v})}/><Field label="İkincil buton" value={heroConfig.secondaryBtnText || ''} onChange={v=>updateHeroConfig({secondaryBtnText:v})}/></div>
         <button onClick={flash} className="px-4 py-2 rounded-xl bg-[#082C6C] text-white text-xs font-bold flex items-center gap-2"><Save className="w-4 h-4"/>Kaydet</button>
       </div>
-      <div className="bg-white rounded-2xl border border-slate-200 p-5 space-y-4">
-        <h3 className="font-bold text-slate-900">Ana Sayfa Hero Görseli</h3>
-        <div className="aspect-[16/9] rounded-xl overflow-hidden bg-slate-100 border border-slate-200"><img src={images.heroImage} className="w-full h-full object-cover" /></div>
-        <p className="text-xs text-slate-500">Hero görselini mevcut Medya Kütüphanesi üzerinden değiştirin.</p>
+      <div className="bg-white rounded-2xl border border-slate-200 p-5 space-y-4 lg:col-span-2">
+        <div><h3 className="font-bold text-slate-900">Ana Sayfa Görsel Alanları</h3><p className="text-xs text-slate-500 mt-1">Üç görsel birbirinden bağımsızdır. Her alan için farklı ürün fotoğrafı veya logo seçebilirsiniz.</p></div>
+        <div className="grid md:grid-cols-3 gap-4">
+          {([
+            ['heroImage','Büyük ana görsel',images.heroImage],
+            ['homeSecondaryImage','Öndeki küçük görsel',images.homeSecondaryImage],
+            ['homeBrandImage','Dairesel logo / amblem',images.homeBrandImage]
+          ] as const).map(([field,title,url])=><div key={field} className="rounded-xl border border-slate-200 p-3 space-y-3">
+            <div className="text-sm font-bold text-slate-800">{title}</div>
+            <div className="aspect-[4/3] rounded-lg overflow-hidden bg-slate-100 flex items-center justify-center">{url?<img src={url} alt={title} className="w-full h-full object-contain bg-white"/>:<span className="text-xs text-slate-400">Henüz görsel seçilmedi</span>}</div>
+            <button type="button" onClick={()=>openPicker('homeVisual',field,title)} className="w-full px-3 py-2.5 rounded-xl bg-[#142F55] text-white text-xs font-bold">Medya Kütüphanesinden Seç</button>
+          </div>)}
+        </div>
       </div>
     </section>
     <FeaturedProducts collectionItems={collectionItems} updateCollectionItem={updateCollectionItem} featured={featured} />

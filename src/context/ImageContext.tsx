@@ -102,6 +102,8 @@ async function uploadImageToGithub(dataUrl: string, folder: string = "site_image
 
 export interface AppImages {
   heroImage: string;
+  homeSecondaryImage: string;
+  homeBrandImage: string;
   aboutImage: string;
   craftsmanshipImages: Record<string, string>; // step number -> image url
   craftsmanshipHeroImage: string; // Atölye sayfası üst banner görseli
@@ -186,6 +188,8 @@ const getDefaultImages = (): AppImages => {
 
   return {
     heroImage: DEFAULT_HERO_IMAGE,
+    homeSecondaryImage: '',
+    homeBrandImage: '',
     aboutImage: DEFAULT_ABOUT_IMAGE,
     craftsmanshipImages: craftMap,
     craftsmanshipHeroImage: '',
@@ -208,6 +212,7 @@ export interface DeploymentProgress {
 interface ImageContextType {
   images: AppImages;
   updateHeroImage: (url: string) => void;
+  updateHomeVisual: (field: 'heroImage' | 'homeSecondaryImage' | 'homeBrandImage', url: string) => void;
   updateAboutImage: (url: string) => void;
   updateCraftsmanshipImage: (stepNumber: string, url: string) => void;
   updateCraftsmanshipHeroImage: (url: string) => void;
@@ -571,7 +576,7 @@ export const ImageProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         if (s.heroConfig) setHeroConfig(s.heroConfig);
         if (s.fairConfig) setFairConfig(s.fairConfig);
         if (s.contactData) setContactData(({...s.contactData} as any));
-        if (s.announcements) setAnnouncements(s.announcements.filter((x:any)=>!String(x).toLowerCase().includes('trendyol')));
+        if (s.announcements) setAnnouncements(s.announcements);
         if (s.collectionItems) setCollectionItems(s.collectionItems);
         if (s.craftsmanshipSteps) setCraftsmanshipSteps(s.craftsmanshipSteps);
         if (s.faqItems) setFaqItems(s.faqItems);
@@ -718,6 +723,16 @@ export const ImageProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const cleanUrl = await uploadImageToGithub(url, 'hero');
     setImages(prev => {
       const next = { ...prev, heroImage: cleanUrl };
+      saveSection('images', { images: next });
+      return next;
+    });
+  };
+
+  const updateHomeVisual = async (field: 'heroImage' | 'homeSecondaryImage' | 'homeBrandImage', url: string) => {
+    setIsDirty(true);
+    const cleanUrl = await uploadImageToGithub(url, field === 'heroImage' ? 'hero' : 'home');
+    setImages(prev => {
+      const next = { ...prev, [field]: cleanUrl };
       saveSection('images', { images: next });
       return next;
     });
@@ -1434,6 +1449,7 @@ export const ImageProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       value={{
         images,
         updateHeroImage,
+        updateHomeVisual,
         updateAboutImage,
         updateCraftsmanshipImage,
         updateCraftsmanshipHeroImage,
