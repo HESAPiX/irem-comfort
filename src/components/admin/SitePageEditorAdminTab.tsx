@@ -83,6 +83,7 @@ export const SitePageEditorAdminTab: React.FC<Props> = ({ page }) => {
         </div>
       </div>
     </section>
+    {pickerModal}
     <FeaturedProducts collectionItems={collectionItems} updateCollectionItem={updateCollectionItem} featured={featured} />
   </div>;
 
