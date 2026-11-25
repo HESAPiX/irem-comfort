@@ -1443,30 +1443,30 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
       {/* Left Collapsible Navigation Sidebar */}
       <aside 
         className={`
-          fixed md:sticky top-0 z-40 h-screen bg-[#062050] text-white flex flex-col transition-all duration-300 border-r border-white/10 shadow-xl shrink-0
+          fixed md:sticky top-0 z-40 h-screen bg-white text-[#182B49] flex flex-col transition-all duration-300 border-r border-[#E8E3D9] shadow-[8px_0_30px_rgba(25,35,50,0.04)] shrink-0
           ${isMobileSidebarOpen ? 'translate-x-0 w-72' : '-translate-x-full md:translate-x-0'}
           ${isSidebarCollapsed ? 'md:w-20' : 'md:w-72'}
         `}
       >
         {/* Sidebar Header Brand */}
-        <div className="p-4 border-b border-white/10 flex items-center justify-between gap-2 shrink-0">
+        <div className="p-5 border-b border-[#EEE9DF] flex items-center justify-between gap-2 shrink-0">
           <div className={`flex items-center gap-3 overflow-hidden ${isSidebarCollapsed ? 'justify-center w-full' : ''}`}>
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#D4AF37] to-amber-200 p-0.5 shrink-0 shadow-lg flex items-center justify-center">
-              <div className="w-full h-full bg-[#062050] rounded-[10px] flex items-center justify-center text-[#D4AF37]">
+            <div className="w-10 h-10 rounded-2xl bg-[#142F55] p-0.5 shrink-0 shadow-sm flex items-center justify-center">
+              <div className="w-full h-full bg-[#142F55] rounded-[14px] flex items-center justify-center text-[#D8B56A]">
                 <ImageIcon className="w-4 h-4" />
               </div>
             </div>
             {!isSidebarCollapsed && (
               <div className="truncate">
-                <h1 className="text-sm font-serif font-bold text-white leading-tight truncate">İrem Comfort</h1>
-                <p className="text-[10px] text-amber-300 font-medium">Yönetim Paneli</p>
+                <h1 className="text-sm font-serif font-bold text-[#172B49] leading-tight truncate">İrem Comfort</h1>
+                <p className="text-[10px] text-[#A77B31] font-semibold tracking-wide">YÖNETİM MERKEZİ</p>
               </div>
             )}
           </div>
 
           <button
             onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-            className="hidden md:flex p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
+            className="hidden md:flex p-1.5 rounded-lg bg-[#F4F1EA] hover:bg-[#EAE4D8] text-[#243B5B] transition-colors cursor-pointer"
             title={isSidebarCollapsed ? "Menüyü Genişlet" : "Menüyü Daralt"}
           >
             {isSidebarCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
@@ -1475,7 +1475,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
 
         {/* Sidebar Search Bar */}
         {!isSidebarCollapsed && (
-          <div className="p-3 border-b border-white/10 shrink-0">
+          <div className="p-4 border-b border-[#EEE9DF] shrink-0">
             <div className="relative">
               <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
@@ -1483,7 +1483,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
                 value={sidebarSearch}
                 onChange={(e) => setSidebarSearch(e.target.value)}
                 placeholder="Menüde ara..."
-                className="w-full bg-white/10 border border-white/10 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#D4AF37] transition-all"
+                className="w-full bg-[#F7F6F2] border border-[#E9E4DA] rounded-xl pl-8 pr-3 py-2.5 text-xs text-[#203653] placeholder-slate-400 focus:outline-none focus:border-[#B8862F] transition-all"
               />
               {sidebarSearch && (
                 <button 
@@ -1498,7 +1498,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
         )}
 
         {/* Navigation Menu Groups (Scrollable) */}
-        <div className="flex-1 overflow-y-auto p-3 space-y-4 scrollbar-thin scrollbar-thumb-white/20">
+        <div className="flex-1 overflow-y-auto p-4 space-y-5 scrollbar-thin scrollbar-thumb-slate-200">
           {SIDEBAR_NAV_GROUPS.map((group, groupIdx) => {
             const filteredItems = sidebarSearch
               ? group.items.filter(item => (item.label || '').toLowerCase().includes(sidebarSearch.toLowerCase()))
@@ -1509,7 +1509,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
             return (
               <div key={groupIdx} className="space-y-1">
                 {!isSidebarCollapsed && (
-                  <h3 className="px-3 text-[10px] font-extrabold tracking-wider uppercase text-amber-300/80 mb-1">
+                  <h3 className="px-3 text-[10px] font-extrabold tracking-[0.14em] uppercase text-[#A77B31] mb-2">
                     {group.groupTitle}
                   </h3>
                 )}
@@ -1527,13 +1527,13 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
                         className={`
                           w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer relative group
                           ${isActive 
-                            ? 'bg-gradient-to-r from-[#D4AF37] to-amber-300 text-[#062050] font-extrabold shadow-lg scale-[1.01]' 
-                            : 'text-slate-200 hover:bg-white/10 hover:text-white'
+                            ? 'bg-[#F5EEDC] text-[#142F55] font-extrabold shadow-none ring-1 ring-[#E5D5B2]' 
+                            : 'text-[#65738A] hover:bg-[#F6F4EF] hover:text-[#172B49]'
                           }
                           ${isSidebarCollapsed ? 'justify-center px-2' : ''}
                         `}
                       >
-                        <IconComponent className={`w-4 h-4 shrink-0 ${isActive ? 'text-[#062050]' : (item.badgeColor || 'text-slate-300')}`} />
+                        <IconComponent className={`w-4 h-4 shrink-0 ${isActive ? 'text-[#062050]' : (isActive ? 'text-[#142F55]' : 'text-[#8490A1]')}`} />
 
                         {!isSidebarCollapsed && (
                           <span className="truncate flex-1 text-left">{item.label}</span>
@@ -1545,7 +1545,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
 
                         {item.countBadge !== undefined && item.countBadge > 0 && (
                           <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                            isActive ? 'bg-[#062050] text-[#D4AF37]' : 'bg-amber-400/20 text-amber-300 border border-amber-400/30'
+                            isActive ? 'bg-[#142F55] text-white' : 'bg-[#F5F0E5] text-[#9B742E] border border-[#E9DFC9]'
                           }`}>
                             {item.countBadge}
                           </span>
@@ -1564,22 +1564,22 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
         </div>
 
         {/* Sidebar Footer */}
-        <div className="p-3 border-t border-white/10 bg-black/20 shrink-0">
+        <div className="p-4 border-t border-[#EEE9DF] bg-[#FAF9F6] shrink-0">
           {!isSidebarCollapsed ? (
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2 overflow-hidden">
-                <div className="w-8 h-8 rounded-full bg-amber-400/20 border border-amber-400/40 flex items-center justify-center text-amber-300 text-xs font-bold">
+                <div className="w-9 h-9 rounded-full bg-[#F1E8D6] border border-[#E6D9BF] flex items-center justify-center text-[#98702E] text-xs font-bold">
                   Y
                 </div>
                 <div className="truncate">
-                  <span className="text-xs font-bold text-white block truncate">Yönetici</span>
-                  <span className="text-[10px] text-emerald-400 block font-mono">Aktif Oturum</span>
+                  <span className="text-xs font-bold text-[#1C304D] block truncate">Yönetici</span>
+                  <span className="text-[10px] text-emerald-700 block font-mono">Aktif Oturum</span>
                 </div>
               </div>
 
               <button
                 onClick={() => handleSiteExit(handleLogout)}
-                className="p-2 rounded-lg bg-rose-500/20 hover:bg-rose-500 text-rose-300 hover:text-white transition-all cursor-pointer"
+                className="p-2 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 transition-all cursor-pointer"
                 title="Çıkış Yap"
               >
                 <LogOut className="w-4 h-4" />
@@ -1588,7 +1588,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
           ) : (
             <button
               onClick={() => handleSiteExit(handleLogout)}
-              className="w-full p-2.5 rounded-xl bg-rose-500/20 hover:bg-rose-500 text-rose-300 hover:text-white transition-all flex items-center justify-center cursor-pointer"
+              className="w-full p-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 transition-all flex items-center justify-center cursor-pointer"
               title="Çıkış Yap"
             >
               <LogOut className="w-4 h-4" />
@@ -1601,11 +1601,11 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
       <div className="flex-1 min-w-0 flex flex-col">
 
         {/* Top Desktop Bar */}
-        <header className="bg-white border-b border-slate-200 px-6 py-4 sticky top-0 z-30 shadow-xs flex flex-wrap items-center justify-between gap-4">
+        <header className="bg-white/95 backdrop-blur-xl border-b border-[#EAE5DB] px-5 sm:px-7 py-4 sticky top-0 z-30 shadow-[0_4px_20px_rgba(30,40,55,0.035)] flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-              className="hidden md:flex p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer"
+              className="hidden md:flex p-2 rounded-xl bg-[#F4F1EA] hover:bg-[#EAE4D8] text-[#243B5B] transition-colors cursor-pointer"
               title="Menüyü Aç/Kapat"
             >
               <Menu className="w-5 h-5" />
@@ -1711,7 +1711,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
         )}
 
         {/* Main Content Body */}
-        <main className="p-4 sm:p-6 lg:p-8 pb-24 md:pb-8 flex-1 space-y-6 max-w-7xl w-full mx-auto">
+        <main className="p-4 sm:p-6 lg:p-8 pb-24 md:pb-8 flex-1 space-y-6 max-w-[1500px] w-full mx-auto">
         
 
 
