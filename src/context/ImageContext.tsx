@@ -726,7 +726,7 @@ export const ImageProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     });
   };
 
-  const updateHomeVisual = async (field: 'heroImage' | 'homeSecondaryImage' | 'homeBrandImage', url: string) => {
+  const updateHomeVisual = async (field: 'heroImage' | 'homeSecondaryImage', url: string) => {
     setIsDirty(true);
     const cleanUrl = await uploadImageToGithub(url, field === 'heroImage' ? 'hero' : 'home');
     setImages(prev => {
