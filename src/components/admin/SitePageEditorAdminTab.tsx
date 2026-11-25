@@ -70,8 +70,8 @@ export const SitePageEditorAdminTab: React.FC<Props> = ({ page }) => {
         <button onClick={flash} className="px-4 py-2 rounded-xl bg-[#082C6C] text-white text-xs font-bold flex items-center gap-2"><Save className="w-4 h-4"/>Kaydet</button>
       </div>
       <div className="bg-white rounded-2xl border border-slate-200 p-5 space-y-4 lg:col-span-2">
-        <div><h3 className="font-bold text-slate-900">Ana Sayfa Görsel Alanları</h3><p className="text-xs text-slate-500 mt-1">Üç görsel birbirinden bağımsızdır. Her alan için farklı ürün fotoğrafı veya logo seçebilirsiniz.</p></div>
-        <div className="grid md:grid-cols-3 gap-4">
+        <div><h3 className="font-bold text-slate-900">Ana Sayfa Görsel Alanları</h3><p className="text-xs text-slate-500 mt-1">İki görsel birbirinden bağımsızdır. Büyük alana ürün fotoğrafı, küçük alana logo veya istediğiniz başka bir görseli seçebilirsiniz.</p></div>
+        <div className="grid md:grid-cols-2 gap-4">
           {([
             ['heroImage','Büyük ana görsel',images.heroImage],
             ['homeSecondaryImage','Küçük görsel / logo',images.homeSecondaryImage]
