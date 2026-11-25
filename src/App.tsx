@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { installPageTranslation } from './utils/pageTranslation';
 import { ImageProvider, useAppImages } from './context/ImageContext';
 import { ConversationProvider } from './context/ConversationContext';
 import { IcLoader } from './components/ui/IcLoader';
@@ -15,6 +16,7 @@ import { ProductsPage } from './components/pages/ProductsPage';
 import { SitePageShell } from './pages/SitePageShell';
 import { HomePage } from './pages/HomePage';
 import { CollectionLandingPage } from './pages/CollectionLandingPage';
+import { CustomersPage } from './pages/CustomersPage';
 import { ProductDetailPage } from './pages/ProductDetailPage';
 import { WholesalePage } from './pages/WholesalePage';
 import { BrandPage } from './pages/BrandPage';
@@ -26,10 +28,12 @@ import { WholesaleQuoteCartPage } from './pages/WholesaleQuoteCartPage';
 import { PublicEngagementPopups } from './components/ui/PublicEngagementPopups';
 
 function MainAppContent() {
-  const { isSettingsLoaded, systemConfig } = useAppImages();
+  const { isSettingsLoaded, systemConfig, language } = useAppImages();
   const getPath = () => (typeof window === 'undefined' ? '/' : window.location.pathname.replace(/\/+$/, '') || '/');
   const [path, setPath] = useState(getPath);
   const [legalDoc, setLegalDoc] = useState<LegalDocType | null>(null);
+
+  useEffect(() => installPageTranslation(language), [language]);
 
   useEffect(() => {
     const onPop = () => setPath(getPath());
@@ -66,6 +70,7 @@ function MainAppContent() {
   else if (path === '/urunler') content = <SitePageShell title="Kadın comfort ürün koleksiyonu" eyebrow="ÜRÜNLER" intro="Mağazanız için model, renk ve konfor seçeneklerini inceleyin." activePath="/urunler" {...shared}><ProductsPage onBackToHome={()=>navigate('/')} onInquireProduct={()=>navigate('/toptan-satis')}/></SitePageShell>;
   else if (path.startsWith('/urunler/')) content = <ProductDetailPage productId={decodeURIComponent(path.split('/').slice(2).join('/'))} {...shared}/>;
   else if (path === '/markamiz') content = <BrandPage {...shared}/>;
+  else if (path === '/musterilerimiz') content = <CustomersPage {...shared}/>;
   else if (path === '/toptan-satis') content = <WholesalePage {...shared}/>;
   else if (path === '/toptan-basvuru') content = <WholesaleApplicationPage {...shared}/>;
   else if (path === '/toptan-sepet') content = <WholesaleQuoteCartPage {...shared}/>;

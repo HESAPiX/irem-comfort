@@ -1,264 +1,42 @@
-import React, { useState, useMemo, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { useAppImages } from '../../context/ImageContext';
-import { CollectionItem } from '../../types';
-import { COLLECTION_ITEMS } from '../../constants/data';
-import { ProductModal } from '../ui/ProductModal';
-import { ProductCard } from '../ui/ProductCard';
-import { SizeGuideModal } from '../ui/SizeGuideModal';
-import { 
-  Search, 
-  Share2, 
-  Eye, 
-  Sparkles, 
-  ArrowLeft, 
-  Check, 
-  ShoppingBag, 
-  PhoneCall, 
-  SlidersHorizontal,
-  ArrowUpRight,
-  Ruler
-} from 'lucide-react';
-import { addToWholesaleCart } from '../../utils/wholesaleCart';
+import React,{useState,useMemo,useEffect} from 'react';
+import {useAppImages} from '../../context/ImageContext';
+import {CollectionItem} from '../../types';
+import {COLLECTION_ITEMS} from '../../constants/data';
+import {ProductModal} from '../ui/ProductModal';
+import {ProductCard} from '../ui/ProductCard';
+import {SizeGuideModal} from '../ui/SizeGuideModal';
+import {Search,SlidersHorizontal,Ruler,ArrowUpRight,Layers3,X,ShoppingBag} from 'lucide-react';
+import {addToWholesaleCart} from '../../utils/wholesaleCart';
 
-interface ProductsPageProps {
-  onBackToHome: () => void;
-  onInquireProduct: (productName: string) => void;
-  onAddToQuote?: (item: CollectionItem, color?: string) => void;
-}
-
-export const ProductsPage: React.FC<ProductsPageProps> = ({
-  onBackToHome,
-  onInquireProduct
-}) => {
-  const { images, collectionItems, t, language } = useAppImages();
-  const [selectedCategory, setSelectedCategory] = useState<string>('Tümü');
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [activeModalItem, setActiveModalItem] = useState<CollectionItem | null>(null);
-  const [selectedColorForModal, setSelectedColorForModal] = useState<string | undefined>(undefined);
-  const [copiedItemId, setCopiedItemId] = useState<string | null>(null);
-  const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
-
-  const categories = [
-    { id: 'Tümü', label: language === 'tr' ? 'Tümü' : language === 'en' ? 'All' : 'الكل' },
-    { id: 'Bayan Comfort Terlik', label: language === 'tr' ? 'Bayan Comfort Terlik' : language === 'en' ? "Women's Comfort Slippers" : 'نعال طبية نسائية' },
-    { id: 'Bayan Comfort Sandalet', label: language === 'tr' ? 'Bayan Comfort Sandalet' : language === 'en' ? "Women's Comfort Sandals" : 'صنادل طبية نسائية' },
-    { id: 'Sabo & Ortopedik Terlik', label: language === 'tr' ? 'Sabo & Ortopedik Terlik' : language === 'en' ? 'Clogs & Orthopedic' : 'قباقيب ونعال طبية' },
-    { id: 'Mantar Taban Terlik', label: language === 'tr' ? 'Mantar Taban Terlik' : language === 'en' ? 'Cork Sole Slippers' : 'نعال نعل فلين' }
-  ];
-
-  useEffect(() => { const load=()=>setCartCount(JSON.parse(localStorage.getItem('irem_wholesale_quote_cart')||'[]').reduce((n:any,x:any)=>n+(x.quantity||0),0)); load(); window.addEventListener('wholesale-cart-updated',load); return()=>window.removeEventListener('wholesale-cart-updated',load); }, []);
-
-  const itemsToDisplay = collectionItems && collectionItems.length > 0 ? collectionItems : COLLECTION_ITEMS;
-
-  const filteredItems = useMemo(() => {
-    return itemsToDisplay.filter(item => {
-      const matchesCategory = selectedCategory === 'Tümü' || item.category === selectedCategory;
-      const q = (searchQuery || '').toLowerCase().trim();
-      const matchesSearch = !q || (
-        (item.name && item.name.toLowerCase().includes(q)) ||
-        (item.subtitle && item.subtitle.toLowerCase().includes(q)) ||
-        (item.description && item.description.toLowerCase().includes(q)) ||
-        (item.category && item.category.toLowerCase().includes(q))
-      );
-      return matchesCategory && matchesSearch;
-    });
-  }, [itemsToDisplay, selectedCategory, searchQuery]);
-
-  const handleShareProduct = (e: React.MouseEvent, item: CollectionItem) => {
-    e.stopPropagation();
-    const shareUrl = `${window.location.origin}${window.location.pathname}?product=${encodeURIComponent(item.id)}`;
-    const shareData = {
-      title: `${item.name} | İrem Comfort`,
-      text: `${item.name} - %100 Hakiki Deri Bayan Comfort Terlik & Sandalet`,
-      url: shareUrl
-    };
-
-    if (navigator.share) {
-      navigator.share(shareData).catch(() => {
-        copyToClipboard(shareUrl, item.id);
-      });
-    } else {
-      copyToClipboard(shareUrl, item.id);
-    }
-  };
-
-  const copyToClipboard = (text: string, itemId: string) => {
-    navigator.clipboard.writeText(text).then(() => {
-      setCopiedItemId(itemId);
-      setTimeout(() => setCopiedItemId(null), 2500);
-    });
-  };
-
-  return (
-    <div className="min-h-screen bg-slate-50 text-[#111111] pt-24 pb-20 px-4 sm:px-6 lg:px-8">
-      {/* Toast Notification */}
-      <AnimatePresence>
-        {copiedItemId && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="fixed top-24 right-4 sm:right-8 z-50 bg-emerald-700 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-2.5 text-xs sm:text-sm font-bold border border-emerald-500"
-          >
-            <Check className="w-5 h-5 text-emerald-300" />
-            <span>
-              {language === 'tr' ? 'Ürün bağlantısı kopyalandı!' : language === 'en' ? 'Product link copied!' : 'تم نسخ رابط المنتج!'}
-            </span>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <div className="max-w-7xl mx-auto space-y-8">
-        
-        {/* Top Header Row with Back Button */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl shadow-sm border border-slate-200/80">
-          <div>
-            <button
-              onClick={onBackToHome}
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-[#062050] text-xs font-bold transition-all mb-3 cursor-pointer"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              <span>{t.productsBackToHome || 'Ana Sayfaya Dön'}</span>
-            </button>
-            <h1 className="text-2xl sm:text-4xl font-extrabold text-[#062050] font-serif-luxury tracking-tight">
-              {t.productsTitle || 'Tüm Ürünlerimiz & Sezon Kataloğu'}
-            </h1>
-            <p className="text-xs sm:text-sm text-slate-600 font-medium mt-1">
-              {t.productsSub || 'Manisa imalatımız hakiki deri bayan terlik, sandalet ve ortopedik sabo koleksiyonumuz.'}
-            </p>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3">
-            <button
-              onClick={() => setIsSizeGuideOpen(true)}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-amber-50 hover:bg-amber-100 text-[#062050] font-extrabold text-xs border border-amber-200 transition-all cursor-pointer shadow-xs active:scale-95"
-            >
-              <Ruler className="w-4 h-4 text-[#D4AF37]" />
-              <span>{language === 'tr' ? 'Beden Rehberi' : language === 'en' ? 'Size Guide' : 'دليل المقاسات'}</span>
-            </button>
-
-            <a href="/toptan-sepet" className="px-4 py-2.5 rounded-2xl bg-[#102f59] text-white text-xs font-bold border border-[#102f59]">🛒 Teklif Sepeti ({cartCount})</a>
-
-            <span className="px-4 py-2.5 rounded-2xl bg-blue-50 text-[#062050] text-xs font-bold border border-blue-100">
-              🛍️ {filteredItems.length} {language === 'tr' ? 'Model Bulundu' : language === 'en' ? 'Models Found' : 'موديل'}
-            </span>
-          </div>
-        </div>
-
-        {/* Filter Controls & Search Bar Box */}
-        <div className="bg-white p-5 sm:p-6 rounded-3xl shadow-sm border border-slate-200/80 space-y-4">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            
-            {/* Search Input */}
-            <div className="relative flex-1">
-              <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder={t.searchPlaceholder || (language === 'tr' ? "Model adı veya kategori ara..." : language === 'en' ? "Search model name or category..." : "ابحث عن موديل أو فئة...")}
-                className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs sm:text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#062050] focus:bg-white transition-all font-medium"
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs font-bold px-2 py-1"
-                >
-                  {language === 'tr' ? 'Temizle' : language === 'en' ? 'Clear' : 'مسح'}
-                </button>
-              )}
-            </div>
-
-            <div className="flex items-center gap-2 text-xs font-bold text-slate-500 shrink-0">
-              <SlidersHorizontal className="w-4 h-4 text-[#062050]" />
-              <span>{language === 'tr' ? 'Filtrele:' : language === 'en' ? 'Filter:' : 'تصفية:'}</span>
-            </div>
-          </div>
-
-          {/* Category Filter Pills */}
-          <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100">
-            {categories.map((cat) => {
-              const isSelected = selectedCategory === cat.id;
-              return (
-                <button
-                  key={cat.id}
-                  onClick={() => setSelectedCategory(cat.id)}
-                  className={`px-4 py-2 rounded-full text-xs font-extrabold uppercase tracking-wider transition-all duration-200 cursor-pointer ${
-                    isSelected
-                      ? 'bg-[#062050] text-white shadow-md'
-                      : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                  }`}
-                >
-                  {cat.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Product Cards Grid */}
-        {filteredItems.length === 0 ? (
-          <div className="bg-white p-12 rounded-3xl text-center shadow-sm border border-slate-200 space-y-4">
-            <div className="w-16 h-16 bg-blue-50 text-[#062050] rounded-2xl flex items-center justify-center mx-auto">
-              <Search className="w-8 h-8" />
-            </div>
-            <h3 className="text-lg font-bold text-slate-800">
-              {language === 'tr' ? 'Aramanıza Uygun Ürün Bulunamadı' : language === 'en' ? 'No Products Found' : 'لم يتم العثور على منتجات'}
-            </h3>
-            <p className="text-xs text-slate-500">
-              {language === 'tr'
-                ? 'Filtrelerinizi sıfırlayarak tüm koleksiyonumuzu inceleyebilirsiniz.'
-                : language === 'en'
-                ? 'Reset your filters to explore our full collection.'
-                : 'يمكنكم إعادة ضبط خيارات البحث لمشاهدة كافة الموديلات.'}
-            </p>
-            <button
-              onClick={() => { setSelectedCategory('Tümü'); setSearchQuery(''); }}
-              className="px-6 py-2.5 rounded-full bg-[#062050] text-white text-xs font-bold tracking-wider uppercase shadow-md hover:bg-[#163E87]"
-            >
-              {language === 'tr' ? 'Filtreleri Temizle' : language === 'en' ? 'Reset Filters' : 'إعادة ضبط الفلاتر'}
-            </button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {filteredItems.map((item) => (
-              <ProductCard
-                key={item.id}
-                item={item}
-                images={images}
-                t={t}
-                onSelect={(selectedItem, initialColor) => {
-                  setSelectedColorForModal(initialColor);
-                  setActiveModalItem(selectedItem);
-                }}
-                onInquire={onInquireProduct}
-                onShare={handleShareProduct}
-                onAddToQuote={(product,color)=>{addToWholesaleCart(product,color); setCartCount((n)=>n+1);}}
-              />
-            ))}
-          </div>
-        )}
-
-      </div>
-
-      {/* Product Detail Modal */}
-      <ProductModal
-        item={activeModalItem}
-        initialColor={selectedColorForModal}
-        onClose={() => {
-          setActiveModalItem(null);
-          setSelectedColorForModal(undefined);
-        }}
-        onInquire={onInquireProduct}
-      />
-
-      {/* Size Guide Modal */}
-      <SizeGuideModal
-        isOpen={isSizeGuideOpen}
-        onClose={() => setIsSizeGuideOpen(false)}
-      />
-    </div>
-  );
+interface ProductsPageProps{onBackToHome:()=>void;onInquireProduct:(productName:string)=>void;onAddToQuote?:(item:CollectionItem,color?:string)=>void;}
+const groupOf=(p:CollectionItem)=>p.collectionGroup?.trim()||(p.category?.toLowerCase().includes('sandalet')?'Sandalet Koleksiyonu':p.category?.toLowerCase().includes('sabo')?'Sabo Koleksiyonu':'Terlik Koleksiyonu');
+const subOf=(p:CollectionItem)=>p.subCollection?.trim()||p.category||'Sezon Seçkisi';
+export const ProductsPage:React.FC<ProductsPageProps>=({onBackToHome,onInquireProduct})=>{
+ const{images,collectionItems,t,language}=useAppImages();const items=collectionItems?.length?collectionItems:COLLECTION_ITEMS;
+ const params=typeof window!=='undefined'?new URLSearchParams(window.location.search):new URLSearchParams();
+ const [selectedGroup,setSelectedGroup]=useState(params.get('koleksiyon')||'Tümü');
+ const [selectedSub,setSelectedSub]=useState(params.get('alt')||'Tümü');
+ const [selectedCategory,setSelectedCategory]=useState('Tümü');
+ const [search,setSearch]=useState('');const[activeItem,setActiveItem]=useState<CollectionItem|null>(null);const[initialColor,setInitialColor]=useState<string|undefined>();const[guide,setGuide]=useState(false);const[cartCount,setCartCount]=useState(0);
+ const groups=useMemo(()=>Array.from(new Set(items.map(groupOf))),[items]);
+ const subs=useMemo(()=>Array.from(new Set(items.filter(p=>selectedGroup==='Tümü'||groupOf(p)===selectedGroup).map(subOf))),[items,selectedGroup]);
+ const categories=useMemo(()=>Array.from(new Set(items.filter(p=>selectedGroup==='Tümü'||groupOf(p)===selectedGroup).map(p=>p.category).filter(Boolean))),[items,selectedGroup]);
+ useEffect(()=>{const load=()=>{try{setCartCount(JSON.parse(localStorage.getItem('irem_wholesale_quote_cart')||'[]').reduce((n:number,x:any)=>n+(x.quantity||0),0))}catch{setCartCount(0)}};load();window.addEventListener('wholesale-cart-updated',load);return()=>window.removeEventListener('wholesale-cart-updated',load)},[]);
+ const filtered=useMemo(()=>items.filter(p=>(selectedGroup==='Tümü'||groupOf(p)===selectedGroup)&&(selectedSub==='Tümü'||subOf(p)===selectedSub)&&(selectedCategory==='Tümü'||p.category===selectedCategory)&&(!search.trim()||[p.name,p.subtitle,p.description,p.category,groupOf(p),subOf(p)].some(v=>(v||'').toLowerCase().includes(search.toLowerCase().trim())))),[items,selectedGroup,selectedSub,selectedCategory,search]);
+ const reset=()=>{setSelectedGroup('Tümü');setSelectedSub('Tümü');setSelectedCategory('Tümü');setSearch('')};
+ return <div className="bg-[#f7f6f2] text-[#10294b] px-4 sm:px-7 lg:px-10 py-8 sm:py-12">
+  <div className="max-w-[1440px] mx-auto">
+   <section className="relative overflow-hidden rounded-[26px] bg-[#10294b] text-white px-6 sm:px-10 lg:px-14 py-10 sm:py-14"><div className="absolute -right-16 -top-24 w-80 h-80 rounded-full border border-white/10"/><div className="relative flex flex-col lg:flex-row lg:items-end justify-between gap-7"><div><div className="text-[10px] uppercase tracking-[.25em] text-[#d7b875] font-extrabold">İrem Comfort · Model arşivi</div><h1 className="mt-4 font-serif-luxury text-4xl sm:text-6xl leading-[1.02]">Ürünleri keşfedin.</h1><p className="mt-4 max-w-xl text-sm leading-7 text-white/65">Koleksiyonlara, alt seçkilere ve ürün özelliklerine göre aradığınız modeli kolayca bulun.</p></div><div className="flex flex-wrap gap-2"><button onClick={()=>setGuide(true)} className="rounded-full border border-white/20 px-4 py-3 text-xs font-bold flex items-center gap-2"><Ruler size={15}/> Beden rehberi</button><a href="/toptan-sepet" className="rounded-full bg-[#d7b875] text-[#10294b] px-4 py-3 text-xs font-extrabold flex items-center gap-2"><ShoppingBag size={15}/> Teklif sepeti ({cartCount})</a></div></div></section>
+   <section className="mt-7 rounded-[22px] bg-white border border-[#e5e1d8] p-5 sm:p-7 shadow-[0_8px_30px_rgba(16,41,75,.035)]">
+    <div className="flex flex-col lg:flex-row gap-4 lg:items-center justify-between"><div><div className="text-[10px] uppercase tracking-[.2em] text-[#a47c36] font-extrabold flex items-center gap-2"><Layers3 size={14}/> Koleksiyon seçin</div><p className="mt-1 text-xs text-slate-500">Önce ana koleksiyonu, ardından alt seçkiyi belirleyin.</p></div><div className="relative w-full lg:max-w-sm"><Search size={17} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"/><input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Model, özellik veya koleksiyon ara..." className="w-full rounded-full border border-slate-200 bg-[#faf9f6] py-3 pl-11 pr-4 text-sm outline-none focus:border-[#b58b43]"/></div></div>
+    <div className="mt-5 flex flex-wrap gap-2"><button onClick={()=>{setSelectedGroup('Tümü');setSelectedSub('Tümü')}} className={`rounded-full px-4 py-2.5 text-xs font-bold ${selectedGroup==='Tümü'?'bg-[#10294b] text-white':'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>Tüm koleksiyonlar</button>{groups.map(g=><button key={g} onClick={()=>{setSelectedGroup(g);setSelectedSub('Tümü')}} className={`rounded-full px-4 py-2.5 text-xs font-bold ${selectedGroup===g?'bg-[#10294b] text-white':'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>{g}</button>)}</div>
+    {subs.length>0&&<div className="mt-5 pt-5 border-t border-slate-100"><div className="text-[10px] uppercase tracking-[.18em] text-slate-400 font-extrabold mb-3">Alt koleksiyonlar</div><div className="flex flex-wrap gap-2"><button onClick={()=>setSelectedSub('Tümü')} className={`rounded-lg border px-3 py-2 text-xs font-semibold ${selectedSub==='Tümü'?'border-[#b58b43] bg-amber-50 text-[#8b6423]':'border-slate-200 text-slate-600'}`}>Tümü</button>{subs.map(s=><button key={s} onClick={()=>setSelectedSub(s)} className={`rounded-lg border px-3 py-2 text-xs font-semibold ${selectedSub===s?'border-[#b58b43] bg-amber-50 text-[#8b6423]':'border-slate-200 text-slate-600'}`}>{s}</button>)}</div></div>}
+    <div className="mt-5 pt-5 border-t border-slate-100 flex flex-wrap items-center gap-2"><span className="text-[10px] uppercase tracking-wider font-bold text-slate-400 flex items-center gap-1"><SlidersHorizontal size={13}/> Ürün türü</span><button onClick={()=>setSelectedCategory('Tümü')} className={`rounded-full px-3 py-2 text-[11px] font-bold ${selectedCategory==='Tümü'?'bg-[#e9e4d9] text-[#10294b]':'bg-slate-50 text-slate-500'}`}>Tümü</button>{categories.map(c=><button key={c} onClick={()=>setSelectedCategory(c)} className={`rounded-full px-3 py-2 text-[11px] font-bold ${selectedCategory===c?'bg-[#e9e4d9] text-[#10294b]':'bg-slate-50 text-slate-500'}`}>{c}</button>)}</div>
+   </section>
+   <div className="mt-9 flex flex-wrap items-end justify-between gap-3"><div><div className="text-[10px] uppercase tracking-[.2em] text-[#a47c36] font-extrabold">Model seçkisi</div><h2 className="mt-2 font-serif-luxury text-3xl sm:text-4xl">{selectedSub!=='Tümü'?selectedSub:selectedGroup!=='Tümü'?selectedGroup:'Tüm ürünler'}</h2></div><div className="flex items-center gap-3"><span className="text-xs text-slate-500">{filtered.length} model</span><button onClick={reset} className="text-xs font-bold text-[#a47c36] flex items-center gap-1"><X size={13}/> Filtreleri temizle</button></div></div>
+   {filtered.length?<div className="mt-6 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-6">{filtered.map(item=><article key={item.id} className="rounded-[22px] bg-white border border-[#e5e1d8] p-3 shadow-[0_5px_24px_rgba(16,41,75,.035)] hover:shadow-[0_15px_35px_rgba(16,41,75,.09)] transition"><ProductCard item={item} images={images} t={t} onSelect={(p,c)=>{setInitialColor(c);setActiveItem(p)}} onInquire={onInquireProduct} onShare={(e,p)=>{e.stopPropagation();const u=location.origin+'/urunler/'+encodeURIComponent(p.id);if(navigator.share)navigator.share({title:p.name,url:u}).catch(()=>navigator.clipboard.writeText(u));else navigator.clipboard.writeText(u)}} onAddToQuote={(p,c)=>addToWholesaleCart(p,c)}/><div className="px-3 pb-2 pt-3 border-t border-slate-100 mt-3"><div className="text-[9px] uppercase tracking-[.18em] font-extrabold text-[#a47c36]">{groupOf(item)} / {subOf(item)}</div><a href={`/urunler/${encodeURIComponent(item.id)}`} className="mt-2 inline-flex items-center gap-1.5 text-xs font-extrabold text-[#10294b]">Ürün detayını aç <ArrowUpRight size={14}/></a></div></article>)}</div>:<div className="mt-6 rounded-[22px] bg-white border border-slate-200 p-12 text-center"><Search size={30} className="mx-auto text-slate-300"/><h3 className="mt-4 font-serif-luxury text-2xl">Bu seçkide ürün bulunamadı</h3><p className="mt-2 text-sm text-slate-500">Filtreleri değiştirerek diğer modelleri inceleyebilirsiniz.</p><button onClick={reset} className="mt-5 rounded-full bg-[#10294b] px-5 py-3 text-xs font-bold text-white">Tüm ürünleri göster</button></div>}
+  </div>
+  <ProductModal item={activeItem} initialColor={initialColor} onClose={()=>{setActiveItem(null);setInitialColor(undefined)}} onInquire={onInquireProduct}/>
+  <SizeGuideModal isOpen={guide} onClose={()=>setGuide(false)}/>
+ </div>;
 };

@@ -214,12 +214,12 @@ export const ProductModal: React.FC<ProductModalProps> = ({
             
             {/* Left Column: Fixed Product Main Image & Thumbnails directly below */}
             <div className="lg:col-span-5 bg-[#F8F8F8] p-3 sm:p-6 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-[#0A2D6F]/10 overflow-hidden shrink-0 max-h-[32vh] sm:max-h-[38vh] lg:max-h-none h-auto lg:h-full">
-              <div className="relative rounded-xl sm:rounded-2xl overflow-hidden flex-1 min-h-[140px] sm:min-h-[220px] bg-gradient-to-br from-[#062050] to-[#0A2D6F] border border-[#0A2D6F]/10 shadow-inner flex items-center justify-center">
+              <div className="relative rounded-xl sm:rounded-2xl overflow-hidden flex-1 min-h-[140px] sm:min-h-[220px] bg-white border border-[#0A2D6F]/10 shadow-inner flex items-center justify-center">
                 {currentDisplayUrl ? (
                   <img
                     src={currentDisplayUrl}
                     alt={item.name}
-                    className="w-full h-full object-cover object-center transition-all duration-300"
+                    className="w-full h-full object-contain object-center bg-white p-2 transition-all duration-300"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       if (target.src.includes('/public/uploads/')) {

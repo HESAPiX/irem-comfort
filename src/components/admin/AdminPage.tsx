@@ -35,10 +35,11 @@ import {
   QrCode, ToggleLeft, ToggleRight, Send, MessageSquare, Crop, Info,
   Mail, Server, AtSign, Save, MailCheck, CheckCircle2, Shield,
   Users, Download, Copy, Trash2, Plus, Search, Phone, HelpCircle,
-  GitBranch, Globe, FileImage, Video, RefreshCw, PowerOff, Palette, BarChart3, Activity,
+  GitBranch, Globe, FileImage, FileSpreadsheet, Video, RefreshCw, PowerOff, Palette, BarChart3, Activity,
   Layout, Database, GraduationCap, ShoppingBag, ChevronLeft, ChevronRight, Menu, X, Smartphone, BellRing, BellOff, Volume2, Star
 } from 'lucide-react';
 import { pwaNotificationService } from '../../services/pwaNotificationService';
+import { TrendyolCatalogImportAdminTab } from './TrendyolCatalogImportAdminTab';
 
 
 const TARGET_SPECS_MAP: Record<string, CropTargetSpecs> = {
@@ -192,7 +193,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
   // that old heartbeat could incorrectly log an active admin out.
 
   // Admin Panel Tabs
-  const [activeTab, setActiveTab] = useState<'overview' | 'appointments' | 'fair' | 'general' | 'collection' | 'craftsmanship' | 'faq' | 'contact' | 'page_builder' | 'presets' | 'leads' | 'crm' | 'testimonials' | 'newsletter' | 'email' | 'system' | 'media' | 'deployment_exp' | 'seo' | 'appearance' | 'analytics' | 'security' | 'ai_arch' | 'live_monitor' | 'backup' | 'ai_training' | 'infrastructure' | 'conv_logs' | 'site_home' | 'site_brand' | 'site_workshop' | 'site_wholesale' | 'site_contact'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'appointments' | 'fair' | 'general' | 'collection' | 'craftsmanship' | 'faq' | 'contact' | 'page_builder' | 'presets' | 'leads' | 'crm' | 'testimonials' | 'newsletter' | 'email' | 'system' | 'media' | 'deployment_exp' | 'seo' | 'appearance' | 'analytics' | 'security' | 'ai_arch' | 'live_monitor' | 'backup' | 'ai_training' | 'infrastructure' | 'conv_logs' | 'site_home' | 'site_brand' | 'site_workshop' | 'site_wholesale' | 'site_contact' | 'trendyol_import'>('overview');
 
   // Sidebar Layout States
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(false);
@@ -213,6 +214,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
       case 'appearance': return 'Görünüm, Tema & Sıralama';
       case 'general': return 'Ana Sayfa & Hakkımızda';
       case 'collection': return 'Koleksiyon Ürünleri';
+      case 'trendyol_import': return 'Trendyol Katalog Aktarımı';
       case 'craftsmanship': return 'Atölye & Zanaat';
       case 'presets': return 'Hazır Görseller';
       case 'media': return 'Medya Kütüphanesi';
@@ -238,7 +240,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
     }
   };
 
-  const [githubRepoInput, setGithubRepoInput] = useState<string>(() => systemConfig.githubRepo || localStorage.getItem('irem_github_repo') || 'kadirkarga25-rgb/irem-comfort');
+  const [githubRepoInput, setGithubRepoInput] = useState<string>(() => { const savedRepo = systemConfig.githubRepo || localStorage.getItem('irem_github_repo') || 'HESAPiX/irem-comfort'; return savedRepo === 'kadirkarga25-rgb/irem-comfort' ? 'HESAPiX/irem-comfort' : savedRepo; });
   const [githubBranchInput, setGithubBranchInput] = useState<string>(() => systemConfig.githubBranch || localStorage.getItem('irem_github_branch') || 'main');
   const [githubTokenInput, setGithubTokenInput] = useState<string>('');
   const [isTestingGithub, setIsTestingGithub] = useState(false);
@@ -299,7 +301,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
         headers: { 'Content-Type': 'application/json' },
         signal: controller.signal,
         body: JSON.stringify({
-          repo: githubRepoInput || localStorage.getItem('irem_github_repo') || 'kadirkarga25-rgb/irem-comfort',
+          repo: githubRepoInput || localStorage.getItem('irem_github_repo') || 'HESAPiX/irem-comfort',
           branch: githubBranchInput || localStorage.getItem('irem_github_branch') || 'main',
           settings: freshStatePayload,
           commitMessage: 'Admin: Site değişiklikleri yayınlandı'
@@ -1284,6 +1286,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
   }
 
   // IF AUTHENTICATED: SHOW FULL ADMIN DASHBOARD
+  // Sadeleştirilmiş yönetim menüsü: günlük içerik işleri önde, teknik araçlar ayrı.
   const SIDEBAR_NAV_GROUPS: {
     groupTitle: string;
     items: {
@@ -1297,62 +1300,53 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
     }[];
   }[] = [
     {
-      groupTitle: 'SİTE SAYFALARI',
+      groupTitle: 'GENEL BAKIŞ',
       items: [
-        { id: 'overview', label: 'Dashboard', icon: Activity, badgeColor: 'text-emerald-400' },
+        { id: 'overview', label: 'Kontrol Paneli', icon: Activity, badgeColor: 'text-emerald-400' },
+      ]
+    },
+    {
+      groupTitle: 'SİTE İÇERİĞİ',
+      items: [
         { id: 'site_home', label: 'Ana Sayfa', icon: Home, badgeColor: 'text-[#D4AF37]' },
-        { id: 'site_brand', label: 'Markamız', icon: Star, badgeColor: 'text-[#D4AF37]' },
-        { id: 'site_workshop', label: 'Atölye', icon: Sparkles, badgeColor: 'text-amber-400' },
-        { id: 'site_wholesale', label: 'Toptan Satış', icon: ShoppingBag, badgeColor: 'text-emerald-400' },
-        { id: 'site_contact', label: 'İletişim', icon: Phone, badgeColor: 'text-blue-400' },
-        { id: 'appointments', label: 'Randevu Yönetimi', icon: Calendar, badgeColor: 'text-amber-400' },
-        { id: 'page_builder', label: 'Sayfa Yerleşimi / CMS', icon: Layout, badgeColor: 'text-amber-400' },
+        { id: 'collection', label: 'Ürünler & Koleksiyonlar', icon: Layers },
+        { id: 'trendyol_import', label: 'Trendyol Ürün Aktarımı', icon: ShoppingBag, badgeColor: 'text-[#B8862F]' },
+        { id: 'site_brand', label: 'Markamız', icon: Star },
+        { id: 'site_workshop', label: 'Atölye', icon: Sparkles },
+        { id: 'site_wholesale', label: 'Toptan Satış', icon: ShoppingBag },
+        { id: 'site_contact', label: 'İletişim', icon: Phone },
+        { id: 'catalog_admin', label: 'Kataloglar', icon: BookOpen, badgeColor: 'text-[#D4AF37]' },
+        { id: 'media', label: 'Fotoğraf & Medya Kütüphanesi', icon: FileImage },
+        { id: 'appearance', label: 'Banner, Renk & Sayfa Düzeni', icon: Palette },
+        { id: 'page_builder', label: 'Sayfa Düzenleyici', icon: Layout },
+      ]
+    },
+    {
+      groupTitle: 'MÜŞTERİLER & İLETİŞİM',
+      items: [
+        { id: 'crm', label: 'Müşteri Kayıtları', icon: Users, badgeColor: 'text-emerald-400' },
+        { id: 'testimonials', label: 'Müşteri Yorumları & Referanslar', icon: Star },
+        { id: 'leads', label: 'Gelen Talepler', icon: MessageSquare, countBadge: contactLeads.length, badgeColor: 'text-emerald-400' },
+        { id: 'faq', label: 'Sıkça Sorulan Sorular', icon: HelpCircle },
+        { id: 'newsletter', label: 'E-posta Bülteni', icon: Mail, countBadge: subscribers.length, badgeColor: 'text-blue-400' },
+        { id: 'appointments', label: 'Randevular', icon: Calendar },
+      ]
+    },
+    {
+      groupTitle: 'KAMPANYA & DUYURULAR',
+      items: [
+        { id: 'contact', label: 'Duyuru Bandı & İletişim Bilgileri', icon: BellRing },
         { id: 'fair', label: 'Fuar & Etkinlik', icon: Calendar, hasPulse: true },
-        { id: 'appearance', label: 'Görünüm & Tema', icon: Palette, badgeColor: 'text-[#D4AF37]' },
       ]
     },
     {
-      groupTitle: 'GÖRSEL & İÇERİK',
+      groupTitle: 'SİSTEM AYARLARI',
       items: [
-        { id: 'general', label: 'Ana Sayfa & Hakkımızda', icon: Sliders },
-        { id: 'collection', label: `Ürün & Koleksiyon Yönetimi (${collectionItems.length})`, icon: Layers },
-        { id: 'craftsmanship', label: 'Atölye & Zanaat', icon: Sparkles },
-        { id: 'presets', label: 'Hazır Görseller', icon: Eye },
-        { id: 'media', label: 'Medya Kütüphanesi', icon: FileImage, badgeColor: 'text-amber-400' },
-        { id: 'catalog_admin', label: 'Katalog Modülü & PDF Kütüphanesi', icon: BookOpen, badgeColor: 'text-[#D4AF37]' },
-      ]
-    },
-    {
-      groupTitle: 'MÜŞTERİ & İLETİŞİM',
-      items: [
-        { id: 'leads', label: 'Müşteri Talepleri', icon: MessageSquare, countBadge: contactLeads.length, badgeColor: 'text-emerald-400' },
-        { id: 'crm', label: 'Müşteriler & CRM', icon: Users, badgeColor: 'text-emerald-400' },
-        { id: 'testimonials', label: `Referanslar & Müşteri Yorumları (${testimonials.length})`, icon: Star, badgeColor: 'text-amber-400' },
-        { id: 'newsletter', label: 'Haber Bülteni', icon: Users, countBadge: subscribers.length, badgeColor: 'text-blue-400' },
-        { id: 'faq', label: 'Sıkça Sorulan Sorular', icon: HelpCircle, badgeColor: 'text-amber-400' },
-        { id: 'contact', label: 'İletişim & Duyuru Bandı', icon: Phone, badgeColor: 'text-emerald-400' },
-      ]
-    },
-    {
-      groupTitle: 'SİSTEM & AYARLAR',
-      items: [
-        { id: 'system', label: 'Deploy & GitHub Yayınlama', icon: Server, badgeColor: 'text-[#D4AF37]', isDeployingBadge: systemConfig.isDeploying },
-        { id: 'email', label: 'E-Posta & SMTP Ayarları', icon: Mail, badgeColor: 'text-amber-500' },
-        { id: 'seo', label: 'SEO, Robots & Sitemap', icon: Globe, badgeColor: 'text-emerald-400' },
-        { id: 'analytics', label: 'Analiz & Performans', icon: BarChart3, badgeColor: 'text-amber-400' },
-        { id: 'security', label: 'Güvenlik Merkezi', icon: ShieldCheck, badgeColor: 'text-[#D4AF37]' },
-        { id: 'deployment_exp', label: 'Deployment Deneyimi (Video)', icon: Video, badgeColor: 'text-[#D4AF37]' },
-        { id: 'backup', label: 'Yedekleme & Geri Yükleme', icon: Database, badgeColor: 'text-indigo-400' },
-      ]
-    },
-    {
-      groupTitle: 'AI & OTOMASYON',
-      items: [
-        { id: 'ai_arch', label: 'AI Altyapısı', icon: Sparkles, badgeColor: 'text-indigo-400' },
-        { id: 'live_monitor', label: 'Canlı Monitör & Destek', icon: Activity, badgeColor: 'text-emerald-400' },
-        { id: 'ai_training', label: 'AI Eğitim Merkezi', icon: GraduationCap, badgeColor: 'text-[#D4AF37]' },
-        { id: 'infrastructure', label: 'Enterprise Altyapı', icon: Server, badgeColor: 'text-emerald-400' },
-        { id: 'conv_logs', label: 'Sohbet Günlükleri & AI Beta', icon: MessageSquare, badgeColor: 'text-amber-400' },
+        { id: 'system', label: 'Kaydetme & Yayınlama', icon: GitBranch, badgeColor: 'text-[#D4AF37]', isDeployingBadge: systemConfig.isDeploying },
+        { id: 'email', label: 'E-posta Gönderim Ayarları', icon: Mail },
+        { id: 'seo', label: 'SEO Ayarları', icon: Globe },
+        { id: 'security', label: 'Güvenlik', icon: ShieldCheck },
+        { id: 'backup', label: 'Yedekleme & Geri Yükleme', icon: Database },
       ]
     }
   ];
@@ -1450,30 +1444,30 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
       {/* Left Collapsible Navigation Sidebar */}
       <aside 
         className={`
-          fixed md:sticky top-0 z-40 h-screen bg-[#062050] text-white flex flex-col transition-all duration-300 border-r border-white/10 shadow-xl shrink-0
+          fixed md:sticky top-0 z-40 h-screen bg-white text-[#182B49] flex flex-col transition-all duration-300 border-r border-[#E8E3D9] shadow-[8px_0_30px_rgba(25,35,50,0.04)] shrink-0
           ${isMobileSidebarOpen ? 'translate-x-0 w-72' : '-translate-x-full md:translate-x-0'}
           ${isSidebarCollapsed ? 'md:w-20' : 'md:w-72'}
         `}
       >
         {/* Sidebar Header Brand */}
-        <div className="p-4 border-b border-white/10 flex items-center justify-between gap-2 shrink-0">
+        <div className="p-5 border-b border-[#EEE9DF] flex items-center justify-between gap-2 shrink-0">
           <div className={`flex items-center gap-3 overflow-hidden ${isSidebarCollapsed ? 'justify-center w-full' : ''}`}>
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#D4AF37] to-amber-200 p-0.5 shrink-0 shadow-lg flex items-center justify-center">
-              <div className="w-full h-full bg-[#062050] rounded-[10px] flex items-center justify-center text-[#D4AF37]">
+            <div className="w-10 h-10 rounded-2xl bg-[#142F55] p-0.5 shrink-0 shadow-sm flex items-center justify-center">
+              <div className="w-full h-full bg-[#142F55] rounded-[14px] flex items-center justify-center text-[#D8B56A]">
                 <ImageIcon className="w-4 h-4" />
               </div>
             </div>
             {!isSidebarCollapsed && (
               <div className="truncate">
-                <h1 className="text-sm font-serif font-bold text-white leading-tight truncate">İrem Comfort</h1>
-                <p className="text-[10px] text-amber-300 font-medium">Yönetim Paneli</p>
+                <h1 className="text-sm font-serif font-bold text-[#172B49] leading-tight truncate">İrem Comfort</h1>
+                <p className="text-[10px] text-[#A77B31] font-semibold tracking-wide">YÖNETİM MERKEZİ</p>
               </div>
             )}
           </div>
 
           <button
             onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-            className="hidden md:flex p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
+            className="hidden md:flex p-1.5 rounded-lg bg-[#F4F1EA] hover:bg-[#EAE4D8] text-[#243B5B] transition-colors cursor-pointer"
             title={isSidebarCollapsed ? "Menüyü Genişlet" : "Menüyü Daralt"}
           >
             {isSidebarCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
@@ -1482,7 +1476,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
 
         {/* Sidebar Search Bar */}
         {!isSidebarCollapsed && (
-          <div className="p-3 border-b border-white/10 shrink-0">
+          <div className="p-4 border-b border-[#EEE9DF] shrink-0">
             <div className="relative">
               <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
@@ -1490,7 +1484,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
                 value={sidebarSearch}
                 onChange={(e) => setSidebarSearch(e.target.value)}
                 placeholder="Menüde ara..."
-                className="w-full bg-white/10 border border-white/10 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#D4AF37] transition-all"
+                className="w-full bg-[#F7F6F2] border border-[#E9E4DA] rounded-xl pl-8 pr-3 py-2.5 text-xs text-[#203653] placeholder-slate-400 focus:outline-none focus:border-[#B8862F] transition-all"
               />
               {sidebarSearch && (
                 <button 
@@ -1505,7 +1499,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
         )}
 
         {/* Navigation Menu Groups (Scrollable) */}
-        <div className="flex-1 overflow-y-auto p-3 space-y-4 scrollbar-thin scrollbar-thumb-white/20">
+        <div className="flex-1 overflow-y-auto p-4 space-y-5 scrollbar-thin scrollbar-thumb-slate-200">
           {SIDEBAR_NAV_GROUPS.map((group, groupIdx) => {
             const filteredItems = sidebarSearch
               ? group.items.filter(item => (item.label || '').toLowerCase().includes(sidebarSearch.toLowerCase()))
@@ -1516,7 +1510,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
             return (
               <div key={groupIdx} className="space-y-1">
                 {!isSidebarCollapsed && (
-                  <h3 className="px-3 text-[10px] font-extrabold tracking-wider uppercase text-amber-300/80 mb-1">
+                  <h3 className="px-3 text-[10px] font-extrabold tracking-[0.14em] uppercase text-[#A77B31] mb-2">
                     {group.groupTitle}
                   </h3>
                 )}
@@ -1534,13 +1528,13 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
                         className={`
                           w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer relative group
                           ${isActive 
-                            ? 'bg-gradient-to-r from-[#D4AF37] to-amber-300 text-[#062050] font-extrabold shadow-lg scale-[1.01]' 
-                            : 'text-slate-200 hover:bg-white/10 hover:text-white'
+                            ? 'bg-[#F5EEDC] text-[#142F55] font-extrabold shadow-none ring-1 ring-[#E5D5B2]' 
+                            : 'text-[#65738A] hover:bg-[#F6F4EF] hover:text-[#172B49]'
                           }
                           ${isSidebarCollapsed ? 'justify-center px-2' : ''}
                         `}
                       >
-                        <IconComponent className={`w-4 h-4 shrink-0 ${isActive ? 'text-[#062050]' : (item.badgeColor || 'text-slate-300')}`} />
+                        <IconComponent className={`w-4 h-4 shrink-0 ${isActive ? 'text-[#062050]' : (isActive ? 'text-[#142F55]' : 'text-[#8490A1]')}`} />
 
                         {!isSidebarCollapsed && (
                           <span className="truncate flex-1 text-left">{item.label}</span>
@@ -1552,7 +1546,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
 
                         {item.countBadge !== undefined && item.countBadge > 0 && (
                           <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                            isActive ? 'bg-[#062050] text-[#D4AF37]' : 'bg-amber-400/20 text-amber-300 border border-amber-400/30'
+                            isActive ? 'bg-[#142F55] text-white' : 'bg-[#F5F0E5] text-[#9B742E] border border-[#E9DFC9]'
                           }`}>
                             {item.countBadge}
                           </span>
@@ -1571,22 +1565,22 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
         </div>
 
         {/* Sidebar Footer */}
-        <div className="p-3 border-t border-white/10 bg-black/20 shrink-0">
+        <div className="p-4 border-t border-[#EEE9DF] bg-[#FAF9F6] shrink-0">
           {!isSidebarCollapsed ? (
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2 overflow-hidden">
-                <div className="w-8 h-8 rounded-full bg-amber-400/20 border border-amber-400/40 flex items-center justify-center text-amber-300 text-xs font-bold">
+                <div className="w-9 h-9 rounded-full bg-[#F1E8D6] border border-[#E6D9BF] flex items-center justify-center text-[#98702E] text-xs font-bold">
                   Y
                 </div>
                 <div className="truncate">
-                  <span className="text-xs font-bold text-white block truncate">Yönetici</span>
-                  <span className="text-[10px] text-emerald-400 block font-mono">Aktif Oturum</span>
+                  <span className="text-xs font-bold text-[#1C304D] block truncate">Yönetici</span>
+                  <span className="text-[10px] text-emerald-700 block font-mono">Aktif Oturum</span>
                 </div>
               </div>
 
               <button
                 onClick={() => handleSiteExit(handleLogout)}
-                className="p-2 rounded-lg bg-rose-500/20 hover:bg-rose-500 text-rose-300 hover:text-white transition-all cursor-pointer"
+                className="p-2 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 transition-all cursor-pointer"
                 title="Çıkış Yap"
               >
                 <LogOut className="w-4 h-4" />
@@ -1595,7 +1589,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
           ) : (
             <button
               onClick={() => handleSiteExit(handleLogout)}
-              className="w-full p-2.5 rounded-xl bg-rose-500/20 hover:bg-rose-500 text-rose-300 hover:text-white transition-all flex items-center justify-center cursor-pointer"
+              className="w-full p-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 transition-all flex items-center justify-center cursor-pointer"
               title="Çıkış Yap"
             >
               <LogOut className="w-4 h-4" />
@@ -1608,11 +1602,11 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
       <div className="flex-1 min-w-0 flex flex-col">
 
         {/* Top Desktop Bar */}
-        <header className="bg-white border-b border-slate-200 px-6 py-4 sticky top-0 z-30 shadow-xs flex flex-wrap items-center justify-between gap-4">
+        <header className="bg-white/95 backdrop-blur-xl border-b border-[#EAE5DB] px-5 sm:px-7 py-4 sticky top-0 z-30 shadow-[0_4px_20px_rgba(30,40,55,0.035)] flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-              className="hidden md:flex p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer"
+              className="hidden md:flex p-2 rounded-xl bg-[#F4F1EA] hover:bg-[#EAE4D8] text-[#243B5B] transition-colors cursor-pointer"
               title="Menüyü Aç/Kapat"
             >
               <Menu className="w-5 h-5" />
@@ -1718,7 +1712,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
         )}
 
         {/* Main Content Body */}
-        <main className="p-4 sm:p-6 lg:p-8 pb-24 md:pb-8 flex-1 space-y-6 max-w-7xl w-full mx-auto">
+        <main className="p-4 sm:p-6 lg:p-8 pb-24 md:pb-8 flex-1 space-y-6 max-w-[1500px] w-full mx-auto">
         
 
 
@@ -2583,6 +2577,26 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
                             className="w-full px-3 py-1.5 text-xs rounded-lg border border-slate-300 focus:border-[#082C6C] focus:outline-none bg-white font-medium"
                           />
                         </div>
+                        <div>
+                          <label className="text-xs font-bold text-slate-700 block mb-1">Ana Koleksiyon</label>
+                          <input
+                            type="text"
+                            value={item.collectionGroup || ''}
+                            placeholder="Örn. Saraçlı Koleksiyon"
+                            onChange={(e) => updateCollectionItem(item.id, { collectionGroup: e.target.value })}
+                            className="w-full px-3 py-1.5 text-xs rounded-lg border border-slate-300 focus:border-[#082C6C] focus:outline-none bg-white font-semibold"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-xs font-bold text-slate-700 block mb-1">Alt Koleksiyon / Seçki</label>
+                          <input
+                            type="text"
+                            value={item.subCollection || ''}
+                            placeholder="Örn. Günlük Saraçlı"
+                            onChange={(e) => updateCollectionItem(item.id, { subCollection: e.target.value })}
+                            className="w-full px-3 py-1.5 text-xs rounded-lg border border-slate-300 focus:border-[#082C6C] focus:outline-none bg-white"
+                          />
+                        </div>
 
                         <div>
                           <label className="text-xs font-bold text-slate-700 block mb-1">Alt Başlık (Slogan)</label>
@@ -2769,6 +2783,14 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
                                     </button>
                                   </div>
                                 </div>
+                                <label className="block pt-2">
+                                  <span className="text-[10px] font-bold text-slate-500">Bu renge ait ek galeri fotoğrafları (her satıra bir URL)</span>
+                                  <textarea rows={3} value={(col.images || []).join('\n')} onChange={(e) => {
+                                    const nextColors = [...item.colors];
+                                    nextColors[colorIdx] = { ...nextColors[colorIdx], images: e.target.value.split('\n').map(url => url.trim()).filter(Boolean) };
+                                    updateCollectionItem(item.id, { colors: nextColors });
+                                  }} placeholder="https://.../renk-on.jpg&#10;https://.../renk-yan.jpg" className="mt-1 w-full px-2 py-1.5 text-[11px] rounded border border-slate-200 focus:border-[#082C6C] focus:outline-none text-slate-700 bg-white" />
+                                </label>
                               </div>
                             ))}
                           </div>
@@ -2918,6 +2940,17 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
               })}
             </div>
           </div>
+        )}
+
+        {activeTab === 'trendyol_import' && (
+          <TrendyolCatalogImportAdminTab
+            existingItems={collectionItems}
+            onImport={(products) => {
+              products.forEach((product) => addCollectionItem(product));
+              markDirty();
+              showToast(`${products.length} model koleksiyon taslağına eklendi. Kaydetmeyi unutmayın.`);
+            }}
+          />
         )}
 
         {/* Tab 3: Craftsmanship Steps */}
@@ -4356,7 +4389,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
                       type="text"
                       value={githubRepoInput}
                       onChange={(e) => setGithubRepoInput(e.target.value)}
-                      placeholder="kadirkarga25-rgb/irem-comfort"
+                      placeholder="HESAPiX/irem-comfort"
                       className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-300 focus:border-[#082C6C] focus:outline-none bg-slate-50 font-mono font-bold"
                     />
                   </div>
@@ -4377,7 +4410,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onReturnToSite }) => {
                   <div className="space-y-1.5 md:col-span-2">
                     <label className="text-xs font-bold text-slate-700 block">GitHub App Bağlantısı</label>
                     <div className="w-full px-3.5 py-3 text-xs rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-800 font-bold">
-                      🟢 GitHub App aktif — Repository: kadirkarga25-rgb/irem-comfort — Branch: main
+                      🟢 GitHub App aktif — Repository: HESAPiX/irem-comfort — Branch: main
                     </div>
                     <p className="text-[11px] text-slate-500">
                       GitHub kimlik doğrulaması sunucu tarafında GitHub App ile yapılır. Personal Access Token tarayıcıda saklanmaz.

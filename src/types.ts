@@ -2,6 +2,8 @@ export interface ColorOption {
   name: string;
   hex: string;
   image?: string;
+  /** Additional photos for this exact colour variant. */
+  images?: string[];
 }
 
 export interface CollectionItem {
@@ -9,6 +11,10 @@ export interface CollectionItem {
   name: string;
   subtitle: string;
   category: string;
+  /** Main curated collection, e.g. Saraçlı Koleksiyon. */
+  collectionGroup?: string;
+  /** Sub-collection inside the main collection. */
+  subCollection?: string;
   tagline: string;
   description: string;
   image: string;
@@ -19,6 +25,11 @@ export interface CollectionItem {
   colors: ColorOption[];
   features: string[];
   isFeatured?: boolean;
+  modelCode?: string;
+  sizes?: string[];
+  barcodes?: string[];
+  leadTime?: string;
+  trendyolUrl?: string;
 }
 
 export interface CraftsmanshipStep {

@@ -135,6 +135,38 @@ function getTransporter(config: EmailConfig = currentEmailConfig) {
   return null;
 }
 
+// Full-page translation proxy. Text is translated on the server to avoid browser CORS issues.
+const translationCache = new Map<string, string>();
+app.post("/api/translate", async (req, res) => {
+  try {
+    const texts = Array.isArray(req.body?.texts) ? req.body.texts.slice(0, 40) : [];
+    const target = String(req.body?.target || "en");
+    if (!["en", "ar"].includes(target)) return res.status(400).json({ error: "Unsupported target language." });
+    if (!texts.length || texts.some((x: any) => typeof x !== "string" || x.length > 1200)) {
+      return res.status(400).json({ error: "Invalid translation payload." });
+    }
+    const translated = await Promise.all(texts.map(async (source: string) => {
+      const key = target + ":" + source;
+      const cached = translationCache.get(key);
+      if (cached) return cached;
+      const params = new URLSearchParams({ client: "gtx", sl: "auto", tl: target, dt: "t", q: source });
+      const response = await fetch("https://translate.googleapis.com/translate_a/single?" + params.toString(), {
+        headers: { "User-Agent": "Mozilla/5.0 (compatible; IremComfort/1.0)" }
+      });
+      if (!response.ok) throw new Error("Translation provider returned " + response.status);
+      const data: any = await response.json();
+      const value = Array.isArray(data?.[0]) ? data[0].map((part: any[]) => part?.[0] || "").join("") : source;
+      translationCache.set(key, value);
+      if (translationCache.size > 12000) translationCache.delete(translationCache.keys().next().value!);
+      return value;
+    }));
+    return res.json({ translations: translated, provider: "Google Translate" });
+  } catch (error: any) {
+    console.error("Translation service error:", error?.message || error);
+    return res.status(502).json({ error: "Çeviri servisine şu anda ulaşılamıyor." });
+  }
+});
+
 // API Health Check
 app.get("/api/health", (_req, res) => {
   res.json({ status: "ok", service: "irem-comfort-backend" });

@@ -22,6 +22,20 @@ export const FaqSection: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('hepsi');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [openFaqId, setOpenFaqId] = useState<string | null>('faq-1');
+  const defaultFaqItems: FaqItem[] = [
+    { id: 'faq-default-1', question: 'İrem Comfort hangi ürünleri üretiyor?', answer: 'İrem Comfort, kadınlara yönelik hakiki deri terlik ve sandalet modelleri geliştirir. Koleksiyonlarımızda farklı saya, taban ve tasarım seçenekleri bulunur.', category: 'genel', isActive: true, isPopular: true },
+    { id: 'faq-default-2', question: 'Toptan satış yapıyor musunuz?', answer: 'Evet. İrem Comfort mağazalara ve perakende iş ortaklarına toptan satış ve sezonluk koleksiyon tedariki sunar. Ürün ve çalışma koşulları için toptan satış sayfamızdan başvuru bırakabilirsiniz.', category: 'toptan', isActive: true, isPopular: true },
+    { id: 'faq-default-3', question: 'Toptan sipariş için minimum adet var mı?', answer: 'Minimum sipariş adedi modele, renk ve numara dağılımına göre değişebilir. İhtiyacınızı ekibimizle paylaşarak güncel koşulları öğrenebilirsiniz.', category: 'toptan', isActive: true, isPopular: false },
+    { id: 'faq-default-4', question: 'Ürünlerde hangi malzemeler kullanılıyor?', answer: 'Ürün açıklamalarında her modelin saya ve taban malzemesi ayrı ayrı belirtilir. Model bazındaki malzeme bilgisi için ürün detaylarını inceleyebilir veya ekibimize danışabilirsiniz.', category: 'genel', isActive: true, isPopular: false },
+    { id: 'faq-default-5', question: 'Numara ve kalıp seçimini nasıl yapmalıyım?', answer: 'Kalıp yapısı modele göre farklılık gösterebilir. Sipariş öncesinde ilgili ürünün numara bilgisini ve varsa kalıp notunu kontrol etmenizi öneririz.', category: 'kalip', isActive: true, isPopular: true },
+    { id: 'faq-default-6', question: 'Hakiki deri terliklerin bakımını nasıl yapmalıyım?', answer: 'Deri ürünleri uzun süre suya ve doğrudan ısıya maruz bırakmayın. Yumuşak, kuru veya hafif nemli bir bezle temizleyin; deri türüne uygun bakım ürünleri kullanın.', category: 'bakim', isActive: true, isPopular: false },
+    { id: 'faq-default-7', question: 'Siparişler ne zaman hazırlanır ve teslim edilir?', answer: 'Hazırlık ve sevkiyat süresi sipariş içeriğine, stok durumuna ve üretim planına göre değişir. Kesin teslimat takvimi sipariş aşamasında paylaşılır.', category: 'kargo', isActive: true, isPopular: false },
+    { id: 'faq-default-8', question: 'Yurt dışına gönderim veya ihracat yapıyor musunuz?', answer: 'İrem Comfort farklı uluslararası pazarlara yönelik iş ortaklıkları yürütür. Ülke, miktar ve teslimat koşulları için bizimle iletişime geçebilirsiniz.', category: 'toptan', isActive: true, isPopular: false },
+    { id: 'faq-default-9', question: 'Koleksiyon kataloğunu nasıl inceleyebilirim?', answer: 'Web sitemizdeki Katalog bölümünden yayınlanan sezon kataloglarını inceleyebilirsiniz. Toptan iş ortaklığı için ürün seçiminizi ekibimizle paylaşabilirsiniz.', category: 'genel', isActive: true, isPopular: false },
+    { id: 'faq-default-10', question: 'Özel renk veya model talep edebilir miyim?', answer: 'Özel üretim talepleri modelin teknik uygunluğuna, malzeme teminine ve üretim adedine göre değerlendirilir. Talebinizi toptan satış ekibimize iletebilirsiniz.', category: 'toptan', isActive: true, isPopular: false }
+  ];
+  const visibleFaqItems = faqItems?.length ? faqItems : defaultFaqItems;
+
 
   const getCategoryLabel = (category: FaqItem['category']) => {
     switch (category) {
@@ -33,6 +47,8 @@ export const FaqSection: React.FC = () => {
         return language === 'tr' ? 'Hakiki Deri Bakımı' : language === 'en' ? 'Genuine Leather Care' : 'العناية بالجلد الطبيعي';
       case 'kalip':
         return language === 'tr' ? 'Numara & Kalıp' : language === 'en' ? 'Size & Fit' : 'المقاس والقالب';
+      case 'genel':
+        return language === 'tr' ? 'Genel Bilgi' : language === 'en' ? 'General Information' : 'معلومات عامة';
       default:
         return language === 'tr' ? 'Genel Bilgi' : language === 'en' ? 'General Info' : 'معلومات عامة';
     }
@@ -54,52 +70,20 @@ export const FaqSection: React.FC = () => {
     { id: 'kargo', label: language === 'tr' ? 'Kargo & Teslimat' : language === 'en' ? 'Shipping & Delivery' : 'الشحن والتوصيل', icon: Truck },
     { id: 'bakim', label: language === 'tr' ? 'Hakiki Deri Bakımı' : language === 'en' ? 'Genuine Leather Care' : 'العناية بالجلد الطبيعي', icon: Sparkles },
     { id: 'kalip', label: language === 'tr' ? 'Numara & Kalıp' : language === 'en' ? 'Size & Fit' : 'المقاس والقالب', icon: Footprints },
+    { id: 'genel', label: language === 'tr' ? 'Genel Bilgi' : language === 'en' ? 'General Info' : 'معلومات عامة', icon: HelpCircle },
   ];
 
-  const translateFaq = (item?: FaqItem | null) => {
-    if (!item) return { question: '', answer: '' };
-    if (language === 'tr') return { question: item.question || '', answer: item.answer || '' };
-
-    const qLower = (item.question || '').toLowerCase();
-    if (qLower.includes('toptan') || qLower.includes('sipariş nasıl')) {
-      return {
-        question: language === 'en' ? 'How can I place a wholesale order?' : 'كيف يمكنني تقديم طلب بالجملة؟',
-        answer: language === 'en'
-          ? 'You can reach us via our WhatsApp hotline or contact form to request our wholesale catalog and price list. We offer custom production and volume discounts for boutique and store orders.'
-          : 'يمكنك التواصل معنا عبر رقم الواتساب أو نموذج الاتصال لطلب كتالوج الجملة وقائمة الأسعار. نوفر خصومات مميزة للمحلات وطلبات الكميات.'
-      };
-    }
-    if (qLower.includes('kargo') || qLower.includes('teslimat')) {
-      return {
-        question: language === 'en' ? 'What are your delivery times and shipping conditions?' : 'ما هي مدة التوصيل وشروط الشحن؟',
-        answer: language === 'en'
-          ? 'Wholesale orders are dispatched within 3-7 business days depending on production volume. Siparişler üretim ve sevkiyat planına göre hazırlanır.'
-          : 'يتم شحن طلبات الجملة خلال 3-7 أيام عمل بحسب حجم الإنتاج. وتُشحن طلبات التجزئة عبر ترينديول خلال يوم العمل نفسه أو التالي.'
-      };
-    }
-    if (qLower.includes('deri bakımı') || qLower.includes('bakım') || qLower.includes('temizlen')) {
-      return {
-        question: language === 'en' ? 'How should genuine leather slippers and sandals be cared for?' : 'كيف يجب الاعتناء بالنعال والصنادل المصنوعة من جلد طبيعي؟',
-        answer: language === 'en'
-          ? 'Clean with a soft, slightly damp cloth. Avoid submerging in water or direct harsh sunlight. Natural leather nourishing creams or neutral beeswax care products can be applied periodically to maintain suppleness.'
-          : 'يُنظف بقطعة قماش ناعمة ومبللة قليلاً. تجنب الغمر بالماء أو التعرض للشمس المباشرة الحارة. يمكن استخدام كريم العناية بالجلد الطبيعي للحفاظ على مرونته.'
-      };
-    }
-    if (qLower.includes('kalıp') || qLower.includes('numara')) {
-      return {
-        question: language === 'en' ? 'Are your sizes true to standard shoe sizes?' : 'هل مقاسات وقوالب الأحذية مطابقة للمقاسات القياسية؟',
-        answer: language === 'en'
-          ? 'Yes, all our models are crafted with anatomically tested standard Turkish/European shoe lasts. We recommend selecting your usual shoe size. For wider feet or sabots, our customer team is happy to advise.'
-          : 'نعم، جميع موديلاتنا مصممة وفقاً للقوالب القياسية التركية/الأوروبية المختبرة طبياً. نوصي باختيار مقاسك المعتاد.'
-      };
-    }
-
-    return { question: item.question || '', answer: item.answer || '' };
-  };
+  // Keep the admin-managed Turkish source text intact. The site-wide
+  // translation observer translates every rendered question and answer,
+  // including newly added FAQ entries, into the selected language.
+  const translateFaq = (item?: FaqItem | null) => ({
+    question: item?.question || '',
+    answer: item?.answer || ''
+  });
 
   // Generate Schema.org FAQPage structured data dynamically for all active FAQ items
   const faqSchemaData = useMemo(() => {
-    const activeItems = faqItems.filter(item => item.isActive !== false);
+    const activeItems = visibleFaqItems.filter(item => item.isActive !== false);
     return {
       "@context": "https://schema.org",
       "@type": "FAQPage",
@@ -116,11 +100,11 @@ export const FaqSection: React.FC = () => {
         };
       })
     };
-  }, [faqItems, language]);
+  }, [visibleFaqItems, language]);
 
   // Filter active FAQs and apply search/category
   const filteredFaqs = useMemo(() => {
-    return faqItems
+    return visibleFaqItems
       .filter(item => item.isActive !== false)
       .filter(item => {
         if (selectedCategory !== 'hepsi' && item.category !== selectedCategory) {
@@ -135,7 +119,7 @@ export const FaqSection: React.FC = () => {
         }
         return true;
       });
-  }, [faqItems, selectedCategory, searchQuery, language]);
+  }, [visibleFaqItems, selectedCategory, searchQuery, language]);
 
   const toggleFaq = (id: string) => {
     setOpenFaqId(prev => (prev === id ? null : id));

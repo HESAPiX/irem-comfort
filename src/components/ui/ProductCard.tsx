@@ -59,7 +59,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   const handleCardClick = () => {
-    onSelect(item, activeColorName);
+    window.location.href = `/urunler/${encodeURIComponent(item.id)}`;
   };
 
   return (
@@ -72,12 +72,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       className="group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-[#062050]/40 transition-all duration-300 hover:shadow-2xl cursor-pointer flex flex-col justify-between"
     >
       {/* Product Image Container */}
-      <div className="relative h-72 sm:h-80 w-full overflow-hidden bg-gradient-to-br from-[#062050] to-[#0A2D6F] flex items-center justify-center">
+      <div className="relative h-72 sm:h-80 w-full overflow-hidden bg-white flex items-center justify-center">
         {activeImage ? (
           <img
             src={activeImage}
             alt={`${item.name} - ${activeColorName || ''}`}
-            className="w-full h-full object-cover object-center group-hover:scale-108 transition-all duration-500 ease-out"
+            className="w-full h-full object-contain object-center p-3 sm:p-4 transition-all duration-500 ease-out"
           />
         ) : (
           <div className="p-6 text-center text-white space-y-2">
